@@ -14,7 +14,7 @@ const products = [
 // This is a standalone program which will populate the database with initial data.
 async function run() {
     console.log('Connecting to database...');
-    await mongoose.connect('mongodb://localhost:27017/gamebox');
+    await mongoose.connect('mongodb://localhost:27017/gamerbox');
 
     // Clear db
     await Order.deleteMany({});

@@ -32,5 +32,5 @@ if (process.env.NODE_ENV === 'production') {
 // Connect to the database.
 // Once connected, the "then" function will be called, which will start the app listening for client connections.
 // Once THAT happens, then the message "App server listening..." will be displayed in the console.
-mongoose.connect('mongodb://localhost:27017/gamebox')
+mongoose.connect('mongodb://localhost:27017/gamerbox')
     .then(() => app.listen(port, () => console.log(`App server listening on port ${port}!`)));
