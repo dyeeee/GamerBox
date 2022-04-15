@@ -16,9 +16,11 @@
     "express": "^4.17.2",
     "mongoose": "^6.2.4",
     "nodemon": "^2.0.15",
+    "request": "^2.88.2",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "cheerio": "^1.0.0-rc.10",
     "cross-env": "^7.0.3",
     "esm": "^3.2.25",
     "node-dev": "^7.4.2"

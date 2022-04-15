@@ -1,5 +1,7 @@
 # GamerBox
 
+# 前段
+
 ### 基本运行要下的包：
 
 ```
@@ -27,6 +29,11 @@ yarn add craco-less
 ### 数据可视化
 
 antd 所属的      ant design charts 或者  antv 选一个？
+
+前段安装
+```
+yarn add axios
+```
 
 
 # 后端
