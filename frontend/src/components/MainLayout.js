@@ -32,7 +32,7 @@ export default function MainLayout () {
         </div>
 
       </Content>
-      <Footer style={{ textAlign: 'center' }}>CS732 Project GamerBox ©2022 Created by Hardy Huskies </Footer>
+      <Footer style={{ textAlign: 'center' }}>CS732 Project - GamerBox ©2022 Created by Hardy Huskies </Footer>
     </Layout>
   )
 }
