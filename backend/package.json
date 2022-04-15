@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "cross-env PORT=3001 node -r esm ./server.js",
+    "start": "cross-env PORT=3001 nodemon -r esm ./server.js",
     "production": "cross-env NODE_ENV=production PORT=3000 node -r esm ./server.js",
     "init-db": "node -r esm ./db/init-db.js"
   },
@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "esm": "^3.2.25"
+    "esm": "^3.2.25",
+    "node-dev": "^7.4.2"
   }
 }
