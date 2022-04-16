@@ -30,7 +30,7 @@ yarn add craco-less
 
 antd 所属的      ant design charts 或者  antv 选一个？
 
-前段安装
+前端安装
 ```
 yarn add axios
 ```
