@@ -62,7 +62,7 @@ export default function PersonalPage () {
   // console.log(isLoading);
 
   return (
-    <>
+    <div style={{ background: `url('./bg1.jpg')` }}>
       <PageHeader
         className="site-page-header"
         title="Personal Page"
@@ -87,6 +87,7 @@ export default function PersonalPage () {
                   // console.log(currentUser);
                   //getCurrentUser(inputEL.current.input.value)
                 }}
+                style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}
               />
             </Col>
           </Row>
@@ -94,7 +95,7 @@ export default function PersonalPage () {
 
         <Col span={12} >
           <Space direction="vertical" style={{ width: '100%' }} size={16}>
-            <Card bordered={true} hoverable={true}>
+            <Card bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
               <Row gutter={[16, 16]}>
                 <Col span={6}>
                   {isLoading ? <Spin size="large" /> : <Image src={currentUser.avatarURL} shape="square" />}
@@ -119,16 +120,16 @@ export default function PersonalPage () {
 
             </Card>
 
-            <Card bordered={true} hoverable={true}>
+            <Card bordered={false} hoverable={true} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
               <Space direction="vertical" style={{ width: '100%' }} size={16}>
-                <Card bordered={true} hoverable={false} size="small">
+                <Card bordered={false} hoverable={false} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                   <Row justify="space-between">
                     <Text strong="true" >最近动态</Text>
                     <Text>过去2周共7.3小时</Text>
                   </Row>
                 </Card>
 
-                <Card bordered={true} hoverable={true} size="small">
+                <Card bordered={false} hoverable={true} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                   <Space direction="vertical" style={{ width: '100%' }} size={10}>
                     <Row gutter={16}>
                       <Col span={7}>
@@ -147,7 +148,81 @@ export default function PersonalPage () {
                       </Col>
                     </Row>
 
-                    <Card bordered={true} size="small">
+                    <Card bordered={false} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
+                      <Row gutter={5}>
+                        <Col span={5}>
+                          <Text type="secondary">成就进度 15/20</Text>
+                        </Col>
+                        <Col span={5}>
+                          <Progress percent={(15 / 20) * 100} showInfo={false} status="active"
+                            strokeColor={'#881E9C'} />
+                        </Col>
+                        <Col span={5} offset={1}>
+                          <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" size={"small"} />
+                        </Col>
+                      </Row>
+                    </Card>
+
+                  </Space>
+                </Card>
+
+                <Card bordered={false} hoverable={true} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
+                  <Space direction="vertical" style={{ width: '100%' }} size={10}>
+                    <Row gutter={16}>
+                      <Col span={7}>
+                        <Image alt="1" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg?t=1649897484" />
+                      </Col>
+                      <Col span={17}>
+                        <Row justify="start" style={{ padding: '6px 0px 10px 0px' }}>
+                          <Text strong="true">Elden Ring</Text>
+                        </Row>
+                        <Row justify="end">
+                          <Text type="secondary">总游玩时长7.6小时</Text>
+                        </Row>
+                        <Row justify="end">
+                          <Text type="secondary">最后游玩于4月12日</Text>
+                        </Row>
+                      </Col>
+                    </Row>
+
+                    <Card bordered={false} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
+                      <Row gutter={5}>
+                        <Col span={5}>
+                          <Text type="secondary">成就进度 15/20</Text>
+                        </Col>
+                        <Col span={5}>
+                          <Progress percent={(15 / 20) * 100} showInfo={false} status="active"
+                            strokeColor={'#881E9C'} />
+                        </Col>
+                        <Col span={5} offset={1}>
+                          <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" size={"small"} />
+                        </Col>
+                      </Row>
+                    </Card>
+
+                  </Space>
+                </Card>
+
+                <Card bordered={false} hoverable={true} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
+                  <Space direction="vertical" style={{ width: '100%' }} size={10}>
+                    <Row gutter={16}>
+                      <Col span={7}>
+                        <Image alt="1" src="https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg?t=1649897484" />
+                      </Col>
+                      <Col span={17}>
+                        <Row justify="start" style={{ padding: '6px 0px 10px 0px' }}>
+                          <Text strong="true">Elden Ring</Text>
+                        </Row>
+                        <Row justify="end">
+                          <Text type="secondary">总游玩时长7.6小时</Text>
+                        </Row>
+                        <Row justify="end">
+                          <Text type="secondary">最后游玩于4月12日</Text>
+                        </Row>
+                      </Col>
+                    </Row>
+
+                    <Card bordered={false} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                       <Row gutter={5}>
                         <Col span={5}>
                           <Text type="secondary">成就进度 15/20</Text>
@@ -246,25 +321,25 @@ export default function PersonalPage () {
 
         {/* 右侧 */}
         <Col span={8} >
-          <Card bordered={true} hoverable={true}>
+          <Card bordered={false} hoverable={true} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
             <Space direction="vertical" style={{ width: '100%' }} size={6}>
-              <Title level={4}>正在线上</Title>
+              <Title level={4} style={{ color: '#4CF066' }}>正在线上</Title>
 
-              <Card size={'small'} bordered={false} hoverable={false} >
+              <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                 <Divider orientation="left" plain>
                   徽章 3
                 </Divider>
                 <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
               </Card>
 
-              <Card size={'small'} bordered={false} hoverable={false} >
+              <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                 <Divider orientation="left" plain>
                   游戏 33
                 </Divider>
                 <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
               </Card>
 
-              <Card size={'small'} bordered={false} hoverable={false} >
+              <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                 <Divider orientation="left" plain>
                   好友 66
                 </Divider>
@@ -298,7 +373,7 @@ export default function PersonalPage () {
           Data from <Text keyboard>Valve</Text>'s API: <Link href="https://ant.design/">https://ant.design/</Link>
         </Paragraph>
       </Row >
-    </>
+    </div>
   )
 }
 

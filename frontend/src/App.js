@@ -5,6 +5,7 @@ import HomePage from "./components/HomePage"
 import NewsPage from "./components/NewsPage"
 import PersonalPage from "./components/PersonalPage"
 import RankPage from "./components/RankPage"
+import TestPage1 from "./components/EffectTestPage"
 
 
 function App () {
@@ -16,6 +17,7 @@ function App () {
         <Route path="/PersonalPage" element={<PersonalPage />} />
         <Route path="/NewsPage" element={<NewsPage />} />
         <Route path="/RankPage" element={<RankPage />} />
+        <Route path="/TestPage1" element={<TestPage1 />} />
 
       </Route>
     </Routes>

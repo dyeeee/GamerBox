@@ -6,3 +6,15 @@
 .red {
   color: red;
 }
+
+.site-page-header {
+  color: aliceblue
+}
+
+.ant-page-header-heading-title {
+  color: aliceblue;
+}
+
+.ant-page-header-heading-sub-title {
+  color: azure
+}

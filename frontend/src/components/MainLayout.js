@@ -14,7 +14,7 @@ export default function MainLayout () {
 
   return (
     <Layout className="layout">
-      <Header style={{position: 'fixed', width: '100%', zIndex: '100000'}}>
+      <Header style={{ position: 'fixed', width: '100%', zIndex: '100000' }}>
         <div className="logo" style={{ float: 'left', marginLeft: '-30px' }}>
           <img src='favicon.ico' height='32' alt='' />
         </div>
@@ -23,6 +23,7 @@ export default function MainLayout () {
           <Menu.Item key="/PersonalPage"><Link to='/PersonalPage'>Personal</Link></Menu.Item>
           <Menu.Item key="/RankPage"><Link to='/RankPage'>Rank</Link></Menu.Item>
           <Menu.Item key="/NewsPage"><Link to='/NewsPage'>News</Link></Menu.Item>
+          <Menu.Item key="/TestPage1"><Link to='/TestPage1'>Test</Link></Menu.Item>
         </Menu>
       </Header>
       <Content style={{ padding: '25px 200px', marginTop: '64px' }}>
