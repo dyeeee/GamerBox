@@ -7,30 +7,43 @@ import usePost from '../usePost';
 const { Title, Paragraph, Text, Link } = Typography;
 
 
-function setup () {
-  let api = 'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=C29734B137600548FE00C77906A76EE5&steamids=76561198399481384';
-  // 方式2
-  axios.get(api)
-    .then(response => {
-      console.log(response.data.response);
-    })
-    .catch(error => {
-      console.log(error);
-    });
-}
-
-function componentDidMount2 () {
-  axios.request('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=C29734B137600548FE00C77906A76EE5&steamids=76561198399481384', {
-    headers: { "Access-Control-Allow-Origin": 'http://127.0.0.1:3000' }
-  })
-    .then(json => console.log(json.data.results))
-}
-
 
 
 
 export default function PersonalPage () {
 
+
+  const user = {
+    steamids: '76561198399481384'
+  }
+
+  const { data: userData, error: isError } = usePost('/api/steamApi/getUserInfo', [], user);
+  console.log(isError);
+  if (isError) {
+    return (
+      <div>
+        error
+      </div>
+    )
+  }
+
+  // const currentUser = userData[0]
+  const currentUser = userData.map(user => (
+    {
+      pname: user.personaname,
+      avatarURL: user.avatar,
+    }));
+
+  // return (
+  //   <div>
+  //     {newsSummaries.map(os => (
+  //       <div key={os.id}>
+  //         <p>{os.id}</p>
+  //         {showhtml(os.content)}
+  //       </div>
+  //     ))}
+  //   </div>
+  // )
 
   return (
     <>
@@ -39,7 +52,10 @@ export default function PersonalPage () {
         title="Personal Page"
         subTitle="ID: 76561198399481384"
         extra={[
-          <Button key="1" type="primary" onClick={componentDidMount2}>
+          <Button key="1" type="primary" onClick={() => {
+            console.log(userData[0]);
+            console.log(currentUser[0].pname);
+          }}>
             Refresh
           </Button>,
         ]}
