@@ -27,6 +27,8 @@ export default function NewsPage () {
             </Col>
           </Row>
         </Card>
+
+        <div style={{height: '5000px'}}></div>
       </Space>
       
 
