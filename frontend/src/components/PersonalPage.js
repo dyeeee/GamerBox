@@ -1,18 +1,48 @@
 import React from 'react'
-import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Progress, List } from 'antd';
+import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Progress, List, Button } from 'antd';
 import "../css/PersonalPage.css"
+import axios from "axios";
+import usePost from '../usePost';
 
 const { Title, Paragraph, Text, Link } = Typography;
 
 
-//This is the homepage, use <Typography> to typography the content.
+function setup () {
+  let api = 'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=C29734B137600548FE00C77906A76EE5&steamids=76561198399481384';
+  // 方式2
+  axios.get(api)
+    .then(response => {
+      console.log(response.data.response);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+}
+
+function componentDidMount2 () {
+  axios.request('https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=C29734B137600548FE00C77906A76EE5&steamids=76561198399481384', {
+    headers: { "Access-Control-Allow-Origin": 'http://127.0.0.1:3000' }
+  })
+    .then(json => console.log(json.data.results))
+}
+
+
+
+
 export default function PersonalPage () {
+
+
   return (
     <>
       <PageHeader
         className="site-page-header"
         title="Personal Page"
         subTitle="ID: 76561198399481384"
+        extra={[
+          <Button key="1" type="primary" onClick={componentDidMount2}>
+            Refresh
+          </Button>,
+        ]}
       />
 
       <Row gutter={[16, 16]} justify="center">
