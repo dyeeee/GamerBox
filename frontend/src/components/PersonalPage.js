@@ -1,77 +1,108 @@
-import React from 'react'
-import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Progress, List, Button } from 'antd';
+import React, { useRef, useState, useEffect } from 'react'
+import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Progress, List, Button, Input, Spin } from 'antd';
 import "../css/PersonalPage.css"
 import axios from "axios";
 import usePost from '../usePost';
 
 const { Title, Paragraph, Text, Link } = Typography;
+const { Search } = Input;
 
 
+var currentUser = null;
 
-
+async function getCurrentUser (id) {
+  await axios.post('/api/steamApi/getUserInfo', { steamids: id })
+    .then(response => {
+      console.log("response.data");
+      console.log(response.data.length);
+      if (response.data.length === 0) {
+        currentUser = {
+          pname: "invalid id",
+          avatarURL: "./Clefairy.png"
+        }
+        console.log(currentUser);
+        return
+      }
+      const userData = response.data;
+      const userArray = userData.map(user => (
+        {
+          pname: user.personaname,
+          avatarURL: user.avatarfull,
+        }));
+      currentUser = userArray[0];
+    })
+    .catch(error => {
+      console.log(error);
+    })
+};
 
 export default function PersonalPage () {
 
+  const inputEL = useRef(null);
 
-  const user = {
-    steamids: '76561198399481384'
-  }
+  // 76561198399481384
+  const [curID, setCurID] = useState("76561198302224528");
+  const [isLoading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(true);
 
-  const { data: userData, error: isError } = usePost('/api/steamApi/getUserInfo', [], user);
-  console.log(isError);
-  if (isError) {
-    return (
-      <div>
-        error
-      </div>
-    )
-  }
+  useEffect(() => {
+    async function fetchData () {
+      setLoading(true);
+      try {
+        await getCurrentUser(curID);
+        setLoading(false);
+      } catch {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [refresh]);
 
-  // const currentUser = userData[0]
-  const currentUser = userData.map(user => (
-    {
-      pname: user.personaname,
-      avatarURL: user.avatar,
-    }));
-
-  // return (
-  //   <div>
-  //     {newsSummaries.map(os => (
-  //       <div key={os.id}>
-  //         <p>{os.id}</p>
-  //         {showhtml(os.content)}
-  //       </div>
-  //     ))}
-  //   </div>
-  // )
+  // console.log(currentUser);
+  // console.log(isLoading);
 
   return (
     <>
       <PageHeader
         className="site-page-header"
         title="Personal Page"
-        subTitle="ID: 76561198399481384"
-        extra={[
-          <Button key="1" type="primary" onClick={() => {
-            console.log(userData[0]);
-            console.log(currentUser[0].pname);
-          }}>
-            Refresh
-          </Button>,
-        ]}
+        subTitle={"ID:" + curID}
       />
 
+
       <Row gutter={[16, 16]} justify="center">
+        <Col span={20} >
+          <Row gutter={[16, 16]} justify="start">
+            <Col span={12}>
+              <Search
+                addonBefore="Steamid"
+                placeholder="input your steamid"
+                allowClear
+                enterButton="Refresh"
+                ref={inputEL}
+                onSearch={() => {
+                  setRefresh(!refresh);
+                  setCurID(inputEL.current.input.value);
+                  console.log(inputEL.current.input.value);
+                  // console.log(currentUser);
+                  //getCurrentUser(inputEL.current.input.value)
+                }}
+              />
+            </Col>
+          </Row>
+        </Col>
+
         <Col span={12} >
           <Space direction="vertical" style={{ width: '100%' }} size={16}>
             <Card bordered={true} hoverable={true}>
               <Row gutter={[16, 16]}>
                 <Col span={6}>
-                  <Image src={"./Clefairy.png"} shape="square" />
+                  {isLoading ? <Spin size="large" /> : <Image src={currentUser.avatarURL} shape="square" />}
+                  {/* <Image src={currentUser.avatarURL} shape="square" /> */}
                 </Col>
                 <Col span={8}>
                   <Space direction="vertical" style={{ width: '100%' }} size={16}>
-                    <Text strong="true">Username: -120%</Text>
+                    <Text strong="true">{isLoading ? "Loading..." : currentUser.pname}</Text>
                     <Text>User Description</Text>
                   </Space>
                 </Col>
@@ -118,7 +149,7 @@ export default function PersonalPage () {
 
                     <Card bordered={true} size="small">
                       <Row gutter={5}>
-                        <Col span={4}>
+                        <Col span={5}>
                           <Text type="secondary">成就进度 15/20</Text>
                         </Col>
                         <Col span={5}>
