@@ -75,5 +75,23 @@ router.post('/getOnlinePlayer', async (req, res) => {
         });
 });
 
+// Gets userinfo
+router.post('/getUserInfo', async (req, res) => {
+    //这个api返回结果就是一个json，所以可以直接用res.send       且可以直接访问json中的各节点
+    let api = 'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=C29734B137600548FE00C77906A76EE5&steamids=';
+    const steamids = req.body.steamids;
+    console.log(api+steamids)
+    axios.get(api+steamids,{
+        retry: 5,
+        retryDelay: 1000,
+        timeout: 6000
+    })
+        .then(response =>{
+            res.json(response.data.response.players);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+});
 
 export default router;
