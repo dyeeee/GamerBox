@@ -1,12 +1,11 @@
 import {React, useEffect, useState} from 'react'
-import { Typography, List, Spin, Space } from 'antd';
+import { Typography, List, Spin, Space} from 'antd';
 import axios from 'axios';
-
 
 const { Title, Paragraph, Text, Link } = Typography;
 
-const appIdList = [730, 570, 1599340, 578080, 1172470, 1245620, 271590, 1203220, 252490, 440];
-const appName = ["Counter-Strike: Global Offensive", "Dota 2", "Lost Ark", "PUBG: BATTLEFROUDS", "Apex Legends", "ELDEN RING", "Grand Theft Auto V", "NARAKA:BLADPOINT", "Rust", "Team Fortress 2"]
+const appIdList = [730, 570, 1599340, 578080, 1172470, 1245620, 271590, 1203220, 252490, 440, 431960, 1418630, 1623660, 1085660, 1794680];
+const appName = ["Counter-Strike: Global Offensive", "Dota 2", "Lost Ark", "PUBG: BATTLEFROUDS", "Apex Legends", "ELDEN RING", "Grand Theft Auto V", "NARAKA:BLADPOINT", "Rust", "Team Fortress 2", "Wallpaper Engine", "Dread Hunger", "MIR 4", "Destiny 2", "Vampire Survivors"]
 
 var listData = []
 
@@ -15,7 +14,6 @@ async function getCurrentUsers (i){
   .then(response => {
     console.log(response.data);
     listData.push({
-      index: i+1,
       appid: appIdList[i],
       avatar: 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + appIdList[i] + '/header.jpg?t=1649897484',
       name: appName[i],
@@ -51,7 +49,9 @@ export default function RankPage () {
     fetchData();
   }, []);
   
-  console.log(listData);
+  sortList();
+
+  //console.log(listData);
   //window.location.reload(false);
   return (
     <div>
@@ -84,7 +84,7 @@ function ShowGameRank(){
           >
           <List.Item
             extra={
-              <font size = "5">{'#'+item.index}</font>
+              <font size = "5">{'#'+(listData.indexOf(item) + 1)}</font>
             }
           ></List.Item>
             {/* <List.Item.Meta
@@ -115,3 +115,7 @@ function ShowLoding(){
   )
 }
 
+function sortList(){
+  console.log(listData);
+  listData.sort(function(a, b){return b.currentUser - a.currentUser});
+}
