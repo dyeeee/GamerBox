@@ -1,5 +1,5 @@
-import {React,useEffect, useState} from 'react'
-import { Typography, List, Avatar, Space } from 'antd';
+import {React, useEffect, useState} from 'react'
+import { Typography, List, Spin, Space } from 'antd';
 import axios from 'axios';
 
 
@@ -8,9 +8,9 @@ const { Title, Paragraph, Text, Link } = Typography;
 const appIdList = [730, 570, 1599340, 578080, 1172470, 1245620, 271590, 1203220, 252490, 440];
 const appName = ["Counter-Strike: Global Offensive", "Dota 2", "Lost Ark", "PUBG: BATTLEFROUDS", "Apex Legends", "ELDEN RING", "Grand Theft Auto V", "NARAKA:BLADPOINT", "Rust", "Team Fortress 2"]
 
-const listData = [];
+var listData = []
 
-const data = async (i)=> {
+async function getCurrentUsers (i){
   await axios.post('/api/steamApi/getOnlinePlayer', {appid: appIdList[i] })
   .then(response => {
     console.log(response.data);
@@ -27,36 +27,41 @@ const data = async (i)=> {
   })
 };
 
-
-
-const columns = [
-  {
-    title: 'Game Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Players Now',
-    dataIntex: 'players',
-    key: 'players',
-  },
-  {
-    title: '',
-    dataIndex: 'img',
-    key: 'img',
-  },
-];
-
 //This is the homepage, use <Typography> to typography the content.
 export default function RankPage () {
+  //listData.length = 0;
+  // for(let i = 0; i < 10; i++){
+  //   getCurrentUsers(i);
+  // }
+  const[isLoading, setLoading] = useState();
 
-  for(let i = 0; i < 10; i++){
-    data(i);
-  }
+  useEffect(() => {
+    async function fetchData(){
+      setLoading(true);
+      try{
+        listData.length = 0;
+        for(let i = 0; i < 10; i++){
+          await getCurrentUsers(i);
+        }
+        setLoading(false);
+      } catch{
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
   
   console.log(listData);
-  // window.location.reload(false);
+  //window.location.reload(false);
+  return (
+    <div>
+      {isLoading ? <ShowLoding /> : <ShowGameRank />}
+    </div>
+  )
   
+}
+
+function ShowGameRank(){
   return (
     <Typography>
       <Title>RankPage</Title>
@@ -96,6 +101,17 @@ export default function RankPage () {
         )}
       />
     </Typography>
+  )
+}
+
+function ShowLoding(){
+  return (
+    <div style = {{textAlign: 'center'}}>
+      <Space size = "large">
+        <Spin tip="Loading..." size = "large"/>
+      </Space>
+    </div>
+
   )
 }
 
