@@ -1,21 +1,33 @@
-import React from 'react'
+import {React,useEffect, useState} from 'react'
 import { Typography, List, Avatar, Space } from 'antd';
+import axios from 'axios';
+
 
 const { Title, Paragraph, Text, Link } = Typography;
 
-const appIdList = [730, 570, 1599340, 578080, 1172470, 1245620, 271590, 1203220, 252490, 440, 431960, 1623660, 1418630, 1794680, 1085660];
+const appIdList = [730, 570, 1599340, 578080, 1172470, 1245620, 271590, 1203220, 252490, 440];
 const appName = ["Counter-Strike: Global Offensive", "Dota 2", "Lost Ark", "PUBG: BATTLEFROUDS", "Apex Legends", "ELDEN RING", "Grand Theft Auto V", "NARAKA:BLADPOINT", "Rust", "Team Fortress 2"]
 
 const listData = [];
-for(let i = 0; i < 10; i++){
-  listData.push({
-    index: i+1,
-    appid: appIdList[i],
-    avatar: 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + appIdList[i] + '/header.jpg?t=1649897484',
-    name: appName[i],
-    currentUser: 1000
-  });
-}
+
+const data = async (i)=> {
+  await axios.post('/api/steamApi/getOnlinePlayer', {appid: appIdList[i] })
+  .then(response => {
+    console.log(response.data);
+    listData.push({
+      index: i+1,
+      appid: appIdList[i],
+      avatar: 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + appIdList[i] + '/header.jpg?t=1649897484',
+      name: appName[i],
+      currentUser: response.data
+    });
+  })
+  .catch(error => {
+    console.log(error);
+  })
+};
+
+
 
 const columns = [
   {
@@ -37,6 +49,14 @@ const columns = [
 
 //This is the homepage, use <Typography> to typography the content.
 export default function RankPage () {
+
+  for(let i = 0; i < 10; i++){
+    data(i);
+  }
+  
+  console.log(listData);
+  // window.location.reload(false);
+  
   return (
     <Typography>
       <Title>RankPage</Title>
