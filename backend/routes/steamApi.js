@@ -94,4 +94,80 @@ router.post('/getUserInfo', async (req, res) => {
         });
 });
 
+//成就部分:
+
+//Get Player Achievements of a game
+router.post('/getAchievements', async(req, res) =>{
+    const appid = req.body.appid;
+    const steamids = req.body.steamids;
+    let api = 'https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key=C29734B137600548FE00C77906A76EE5&steamid='+steamids+'&appid='+appid;
+    console.log(api);
+    axios.get(api,{
+        retry: 5,
+        retryDelay: 1000,
+        timeout: 6000
+    })
+        .then(response =>{
+            res.json(response.data.playerstats.achievements);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+})
+
+//get global achievement percentages for app
+router.post('/getGlobalAchievements', async(req, res) =>{
+    const appid = req.body.appid;
+    let api = 'https://api.steampowered.com/ISteamUserStats/GetGlobalAchievementPercentagesForApp/v2/?gameid='+appid;
+    console.log(api);
+    axios.get(api,{
+        retry: 5,
+        retryDelay: 1000,
+        timeout: 6000
+    })
+        .then(response =>{
+            res.json(response.data.achievementpercentages.achievements);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+})
+
+//get the name and icon of achievements for app
+router.post('/getAchievementsDetail', async(req, res) =>{
+    const appid = req.body.appid;
+    let api = 'https://api.steampowered.com/ISteamUserStats/GetSchemaForGame/v2/?key=C29734B137600548FE00C77906A76EE5&appid='+appid;
+    console.log(api);
+    axios.get(api,{
+        retry: 5,
+        retryDelay: 1000,
+        timeout: 6000
+    })
+        .then(response =>{
+            res.json(response.data.game.availableGameStats.achievements);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+})
+
+//获取玩家库下游戏(里面有icon，配合图床http://media.steampowered.com/steamcommunity/public/images/apps/{appid}/{hash}.jpg使用。也可以用轩宝的大图图床，只需要appid即可)
+router.post('/getGamesLibrary', async(req, res) =>{
+    const steamids = req.body.steamids;
+    let api = 'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=C29734B137600548FE00C77906A76EE5&steamid='+steamids+'&include_appinfo=true&include_free_sub=false&include_free_sub=true';
+    console.log(api);
+    axios.get(api,{
+        retry: 5,
+        retryDelay: 1000,
+        timeout: 6000
+    })
+        .then(response =>{
+            res.json(response.data.response.games);
+        })
+        .catch(error => {
+            console.log(error);
+        });
+})
+
+
 export default router;
