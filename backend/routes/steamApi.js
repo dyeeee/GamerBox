@@ -162,10 +162,28 @@ router.post('/getGamesLibrary', async(req, res) =>{
         timeout: 6000
     })
         .then(response =>{
-            res.json(response.data.response.games);
+            res.json(response.data.response);
         })
         .catch(error => {
-            console.log(error);
+            res.status(404).send('Not Found')
+        });
+})
+
+//user's steam level
+router.post('/getUserLevel', async(req, res) =>{
+    const steamids = req.body.steamids;
+    let api = 'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=C29734B137600548FE00C77906A76EE5&steamid='+steamids;
+    console.log(api);
+    axios.get(api,{
+        retry: 5,
+        retryDelay: 1000,
+        timeout: 6000
+    })
+        .then(response =>{
+            res.json(response.data.response.player_level);
+        })
+        .catch(error => {
+            res.status(404).send('Not Found')
         });
 })
 

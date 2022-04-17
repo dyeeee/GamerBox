@@ -6,6 +6,7 @@ import NewsPage from "./components/NewsPage"
 import PersonalPage from "./components/PersonalPage"
 import RankPage from "./components/RankPage"
 import TestPage1 from "./components/EffectTestPage"
+import GameLibrary from './components/GameLibrary'
 
 
 function App () {
@@ -14,7 +15,9 @@ function App () {
       <Route path="/" element={<MainLayout />}>
         <Route index element={<HomePage />} />
 
-        <Route path="/PersonalPage" element={<PersonalPage />} />
+        <Route path="/PersonalPage/:uid" element={<PersonalPage />} >
+        <Route path=":id" element={<GameLibrary />} />
+          </Route>
         <Route path="/NewsPage" element={<NewsPage />} />
         <Route path="/RankPage" element={<RankPage />} />
         <Route path="/TestPage1" element={<TestPage1 />} />
