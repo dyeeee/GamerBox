@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as React from "react";
 import { Form, Input, Button, Card, notification } from 'antd';
 import { FrownOutlined } from '@ant-design/icons';
-
+import axios from "axios";
+import useGet from "../useGet";
+import { Line } from '@ant-design/plots';
+import gameData from '../gameData.json';
 
 const layout = {
   labelCol: { span: 5 },
@@ -69,15 +72,18 @@ const LoginForm = () => {
 }
 
 export default function TestPage1 () {
+  const config = {
+    data: gameData,
+    padding: 'auto',
+    xField: 'DateTime',
+    yField: 'Players',
+    xAxis: {
+      // type: 'timeCat',
+      tickCount: 5,
+    },
+  };
 
-  return (
-    <>
-      <div style={{ background: `url('./testimg.png')` }}>
-        <LoginForm />
-      </div>
-
-    </>
-  )
+  return <Line {...config} />;
 }
 
 // .target {

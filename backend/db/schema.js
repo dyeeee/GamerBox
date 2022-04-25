@@ -2,18 +2,14 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const productSchema = new Schema({
-    name: String,
-    cost: Number,
-    image: String
+const gameDataSchema = new Schema({
+    DateTime: String,
+    Players: Number,
+    PlayersTrend: Number,
+    TwitchViewers: Number
 });
 
-const Product = mongoose.model('Product', productSchema);
+const GameData = mongoose.model('GameData', gameDataSchema);
 
-const orderSchema = new Schema({
-    order: [{ type: Schema.Types.ObjectId, ref: 'Product' }]
-});
 
-const Order = mongoose.model('Order', orderSchema);
-
-export { Product, Order };
+export { GameData };
