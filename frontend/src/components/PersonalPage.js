@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Progress, List, Button, Input, Spin,Pagination } from 'antd';
+import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Progress, List, Button, Input, Spin, Pagination } from 'antd';
 import "../css/PersonalPage.css"
 import axios from "axios";
 import { Outlet } from 'react-router-dom';
@@ -24,13 +24,13 @@ async function getCurrentUser (id) {
       if (response.data.length === 0) {
         currentUser = {
           pname: "invalid id",
-          avatarURL: "./Clefairy.png",
+          avatarURL: "../../Clefairy.png",
         }
         // console.log(currentUser);
         return
       }
       const userData = response.data;
-      
+
       const userArray = userData.map(user => (
         {
           pname: user.personaname,
@@ -43,22 +43,22 @@ async function getCurrentUser (id) {
     })
 };
 
-async function getGameAchievement(gameid){
+async function getGameAchievement (gameid) {
 
 };
 
-async function getUserLevel(uid){
+async function getUserLevel (uid) {
   await axios.post('/api/steamApi/getUserLevel', { steamids: uid })
-      .then(response =>{
-        level = response.data;
-      })
-      .catch(error => {
-          level = 0;
-          return
-      })
+    .then(response => {
+      level = response.data;
+    })
+    .catch(error => {
+      level = 0;
+      return
+    })
 }
 
-async function getGamesLibrary(uid){
+async function getGamesLibrary (uid) {
   await axios.post('/api/steamApi/getGamesLibrary', { steamids: uid })
     .then(response => {
       game_count = response.data.game_count;
@@ -67,10 +67,10 @@ async function getGamesLibrary(uid){
         {
           appid: game.appid,
           name: game.name,
-          playtime: game.playtime_forever/60,
-          img_icon: 'http://media.steampowered.com/steamcommunity/public/images/apps/'+game.appid+'/'+game.img_icon_url+'.jpg',
+          playtime: game.playtime_forever / 60,
+          img_icon: 'http://media.steampowered.com/steamcommunity/public/images/apps/' + game.appid + '/' + game.img_icon_url + '.jpg',
           img_logo: 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + game.appid + '/header.jpg?t=1649897484',
-          playtimeRecently: !isNaN(game.playtime_2weeks) ? game.playtime_2weeks/60 : 0,
+          playtimeRecently: !isNaN(game.playtime_2weeks) ? game.playtime_2weeks / 60 : 0,
         }));
     })
     .catch(error => {
@@ -78,12 +78,12 @@ async function getGamesLibrary(uid){
       gameArray = [{
         appid: 1,
         name: 2,
-        playtime: 60/60,
-        img_icon: 'http://media.steampowered.com/steamcommunity/public/images/apps/'+550+'/'+'7d5a243f9500d2f8467312822f8af2a2928777ed'+'.jpg',
+        playtime: 60 / 60,
+        img_icon: 'http://media.steampowered.com/steamcommunity/public/images/apps/' + 550 + '/' + '7d5a243f9500d2f8467312822f8af2a2928777ed' + '.jpg',
         img_logo: 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + 550 + '/header.jpg?t=1649897484',
         playtimeRecently: 0,
-      }, 
-    ]
+      },
+      ]
     })
 };
 
@@ -175,10 +175,10 @@ export default function PersonalPage () {
 
 
             </Card>
-                <AuthContext.Provider value={curID}>
-                  <Outlet/>
-                </AuthContext.Provider>
-            
+            <AuthContext.Provider value={curID}>
+              <Outlet />
+            </AuthContext.Provider>
+
           </Space>
 
         </Col>
@@ -200,7 +200,7 @@ export default function PersonalPage () {
                 <Divider orientation="left" plain>
                   游戏 {game_count}
                 </Divider>
-                {gameArray.map(os =>(
+                {gameArray.map(os => (
                   <Avatar src={os.img_icon} shape="square" />
                 ))}
               </Card>

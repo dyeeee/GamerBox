@@ -1,0 +1,12 @@
+.ant-modal-content {
+  background: rgba(255, 255, 255, .7);
+  backdropFilter: blur(10px)
+}
+
+.ant-modal-header {
+  background: rgba(255, 0, 0, .7);
+  backdropFilter: blur(10px)
+}
+
+
+/* style={{ background: 'rgba(255, 255, 255, .7)', backdropFilter: 'blur(10px)' }} */
