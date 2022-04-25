@@ -3,12 +3,18 @@ import { Typography,  Row, Col, Card, Space, Avatar, Image, Progress,Pagination 
 import axios from "axios";
 import { useParams } from 'react-router-dom';
 import { AuthContext } from './PersonalPage';
+import {SmallDashOutlined} from '@ant-design/icons'
 const { Text } = Typography;
 
 
 var gameArray = [];
 var count = 0;
 var currentPageData = [];
+//当前页的十个游戏的游戏成就
+//name      defaultvalue  displayName  hidden      description  icon  icongray
+var gameAchievements = [];
+var CurrentNumberOfPage = 5;
+var NumberOfAchievemnts = [];
 
 async function getGamesLibrary(uid){
     await axios.post('/api/steamApi/getGamesLibrary', { steamids: uid })
@@ -27,7 +33,7 @@ async function getGamesLibrary(uid){
       })
       .catch(error => {
         gameArray = [{
-          appid: 1,
+          appid: 730,
           name: 2,
           playtime: 60/60,
           img_icon: 'http://media.steampowered.com/steamcommunity/public/images/apps/'+550+'/'+'7d5a243f9500d2f8467312822f8af2a2928777ed'+'.jpg',
@@ -39,8 +45,36 @@ async function getGamesLibrary(uid){
   };
 
 async function paging(gameArray, currentPage){
-    const start = currentPage-10;
+    const start = currentPage-CurrentNumberOfPage;
     return gameArray.slice(start,currentPage);
+}
+
+async function getCurrentPageAchievement(currentPageData, uid){
+  for(let i=0;i<currentPageData.length; i++){
+    await axios.post('/api/steamApi/getAchievementsDetail', {appid: currentPageData[i].appid})
+    .then(response =>{
+      gameAchievements.push(response.data);
+    })
+    .catch(error =>{
+      console.log(error);
+    })
+    //找出用户达成的成就数目
+    await axios.post('/api/steamApi/getAchievements', {appid: currentPageData[i].appid, steamids: uid})
+    .then(response =>{
+      console.log(NumberOfAchievemnts)
+      //找出achieved为1的数量
+      let temp = 0;
+      response.data.map(x =>{
+        if(x.achieved === 1){
+          temp++;
+        }
+      })
+      NumberOfAchievemnts.push(temp);
+    })
+    .catch(error =>{
+      console.log(error);
+    })
+  }
 }
 
 export default function GameLibrary() {
@@ -55,7 +89,8 @@ export default function GameLibrary() {
         setLoading(true);
         try {
           await getGamesLibrary(curID);
-          currentPageData = await paging(gameArray,currentPage.id*10);
+          currentPageData = await paging(gameArray,currentPage.id*CurrentNumberOfPage);
+          await getCurrentPageAchievement(currentPageData,curID);
           setLoading(false);
         } catch {
           setLoading(false);
@@ -84,8 +119,9 @@ export default function GameLibrary() {
                   </Row>
                 </Card>
 
-                {currentPageData.map(os => (
-                  <Card bordered={false} hoverable={true} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }} key={os.appid}>
+                {currentPageData.map((os, index) => (
+
+                  <Card bordered={false} hoverable={true} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }} key={index}>
                   <Space direction="vertical" style={{ width: '100%' }} size={10}>
                     <Row gutter={16}>
                       <Col span={7}>
@@ -107,14 +143,29 @@ export default function GameLibrary() {
                     <Card bordered={false} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                       <Row gutter={5}>
                         <Col span={5}>
-                          <Text type="secondary">成就进度 15/20</Text>
+                          <Text type="secondary">成就进度 {NumberOfAchievemnts[index]}/{gameAchievements[index].length == null ? 0 : gameAchievements[index].length}</Text>
                         </Col>
                         <Col span={5}>
-                          <Progress percent={(15 / 20) * 100} showInfo={false} status="active"
+                          <Progress percent={((NumberOfAchievemnts[index]) / (gameAchievements[index].length == null ? 0 : gameAchievements[index].length)) * 100} showInfo={false} status="active"
                             strokeColor={'#881E9C'} />
                         </Col>
-                        <Col span={5} offset={1}>
-                          <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" size={"small"} />
+                        <Col span={10} offset={1}>
+                          <Space>
+                          {
+                            gameAchievements[index].length == null ? 
+                            <></> : 
+                            gameAchievements[index].map((s,index) => (
+                              
+                              index > 4 ? <></> :  <Avatar src={s.icon} shape="square" size={"small"}/>
+                            ))
+                          }
+
+                          {
+                            gameAchievements[index].length > 4 ? 
+                            <SmallDashOutlined /> : <></>
+                          }
+                          </Space>
+
                         </Col>
                       </Row>
                     </Card>
@@ -123,12 +174,11 @@ export default function GameLibrary() {
                 </Card>
                 ))}
 
-                <Pagination defaultCurrent={currentPage.id} total={count} defaultPageSize={10} showSizeChanger={false} onChange={page => {
+                <Pagination defaultCurrent={currentPage.id} total={count} defaultPageSize={CurrentNumberOfPage} showSizeChanger={false} onChange={page => {
                     window.location.href = '/PersonalPage/'+curID+'/'+page;
-                }}/>
+                }} />
               </Space>
               
             </Card>
-            
   )
 }

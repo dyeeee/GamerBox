@@ -147,6 +147,7 @@ router.post('/getAchievementsDetail', async(req, res) =>{
             res.json(response.data.game.availableGameStats.achievements);
         })
         .catch(error => {
+            res.json({})
             console.log(error);
         });
 })

@@ -1,5 +1,5 @@
 import './App.less'
-import { Route, Routes } from "react-router-dom"
+import {Route, Routes } from "react-router-dom"
 import MainLayout from "./components/MainLayout"
 import HomePage from "./components/HomePage"
 import NewsPage from "./components/NewsPage"
