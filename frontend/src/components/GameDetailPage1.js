@@ -1,8 +1,12 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Tag, Carousel, Progress, List, Button, Input, Spin, Pagination } from 'antd';
 import { Liquid } from '@ant-design/charts';
+import { Line, DualAxes } from '@ant-design/plots';
 import "../css/GlobalCSS.css"
+import useGet from "../useGet";
+
 export const AuthContext = React.createContext({});
+
 
 const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;
@@ -16,17 +20,13 @@ const imgStyle = {
 
 
 export default function GameDetailPage1 () {
+  const { data: testdata } = useGet('/api/fetchData/440', []);
+  console.log(testdata)
   const config = {
-    width: 150,
-    padding: [0, 0, 0, 0],
-    percent: 0.25,
-    shape: 'diamond',
-    outline: {
-      border: 4,
-    },
-    wave: {
-      length: 128,
-    },
+    data: [testdata, testdata],
+    padding: 'auto',
+    xField: 'DateTime',
+    yField: ['Players', 'PlayersTrend'],
   };
 
   return (
@@ -106,6 +106,14 @@ export default function GameDetailPage1 () {
             </Space>
           </Card>
         </Col>
+
+
+        {testdata != null ? <Col span={22} >
+          <Card className="blur-card" size={'small'} bordered={false} hoverable={false} >
+            <DualAxes {...config} />
+          </Card>
+        </Col> : <></>}
+
 
         <Col span={22} >
           <Card size={'small'}

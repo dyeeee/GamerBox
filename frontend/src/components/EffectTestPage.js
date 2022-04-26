@@ -1,7 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import * as React from "react";
 import { Form, Input, Button, Card, notification, Modal } from 'antd';
 import { FrownOutlined } from '@ant-design/icons';
+
+import axios from "axios";
+import useGet from "../useGet";
+import { Line, DualAxes } from '@ant-design/plots';
+import gameData from '../gameData.json';
 import "../css/GlobalCSS.css"
 
 
@@ -129,15 +134,16 @@ const LoginForm = () => {
 }
 
 export default function TestPage1 () {
+  const {data: testdata} = useGet('/api/fetchData/440', []);
+  console.log(testdata)
+  const config = {
+    data: [testdata, testdata],
+    padding: 'auto',
+    xField: 'DateTime',
+    yField: ['Players', 'PlayersTrend'],
+  };
 
-  return (
-    <>
-      <div style={{ background: `url('./testimg.png')` }}>
-        <LoginForm />
-      </div>
-
-    </>
-  )
+  return <DualAxes {...config} />;
 }
 
 // .target {

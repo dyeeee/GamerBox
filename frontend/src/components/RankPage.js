@@ -1,5 +1,5 @@
 import {React, useEffect, useState} from 'react'
-import { Typography, List, Spin, Space} from 'antd';
+import { Typography, List, Spin, Space, Image} from 'antd';
 import axios from 'axios';
 
 const { Title, Paragraph, Text, Link } = Typography;
@@ -72,16 +72,18 @@ function ShowGameRank(){
         bordered = "true"
         dataSource={listData}
         renderItem={item => (
-          <a href={item.avatar}>
+          
           <List.Item
             extra={
-              <img
-                width={200}
-                alt="logo"
-                src={item.avatar}
-              />
+              // <img
+              //   width={200}
+              //   alt="logo"
+              //   src={item.avatar}
+              // />
+              <Image src = {item.avatar} width = {200}/>
             }
           >
+          
           <List.Item
             extra={
               <font size = "5">{'#'+(listData.indexOf(item) + 1)}</font>
@@ -91,13 +93,14 @@ function ShowGameRank(){
               title= {<font size="5">{'#' + item.index}</font>}
             /> */}
             <List.Item.Meta
-              title= {<font size="4">{item.name}</font>}
+             title= {<a href={item.avatar} target = "_blank"><font size="4">{item.name}</font></a>}
             />
             <List.Item.Meta
               title = {<font size="4">{"Current user: "+item.currentUser}</font>}
             />
+            
           </List.Item>
-          </a>
+          
         )}
       />
     </Typography>

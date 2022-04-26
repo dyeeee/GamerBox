@@ -1,15 +1,24 @@
 import express from "express";
-
-const router = express.Router();
-
-// Adds both the /products and /orders routes.
-import products from './products';
-import orders from './orders';
+import {GameData} from "../db/schema"
 import steamApi from './steamApi';
 import crawler from './crawler';
 
-router.use('/products', products);
-router.use('/orders', orders);
+const router = express.Router();
+
+router.get('/fetchData', async(req, res)=> {
+    const data = await GameData.find({});
+    res.json(data);
+    console.log("123123312"+data);
+});
+
+router.get('/fetchData/:gameId', async(req, res)=> {
+    const {gameId} = req.params;
+
+    const data = await GameData.find({GameID: gameId});
+    res.json(data);
+    console.log("123123312"+data);
+});
+
 router.use('/steamApi',steamApi);
 router.use('/crawler',crawler);
 

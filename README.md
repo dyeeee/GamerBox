@@ -33,6 +33,8 @@ antd 所属的      ant design charts 或者  antv 选一个？
 前端安装
 ```
 yarn add axios
+
+npm install @ant-design/charts --save
 ```
 
 
