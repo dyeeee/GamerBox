@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Tag, Carousel, Progress, List, Button, Input, Spin, Pagination } from 'antd';
 import { Liquid } from '@ant-design/charts';
+import "../css/GlobalCSS.css"
 export const AuthContext = React.createContext({});
 
 const { Title, Paragraph, Text, Link } = Typography;
@@ -12,6 +13,7 @@ const imgStyle = {
   objectFit: 'cover',
   width: '100%'
 }
+
 
 export default function GameDetailPage1 () {
   const config = {
@@ -106,23 +108,63 @@ export default function GameDetailPage1 () {
         </Col>
 
         <Col span={22} >
-          <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
-            <Space direction="vertical" style={{ width: '100%' }} size={10}>
+          <Card size={'small'}
+            bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
+            <Divider orientation="left">
+              Achievements
+            </Divider>
 
-              <Divider orientation="left">
-                Achievements
-              </Divider>
-              <Space style={{ width: '100%' }} size={10}>
+            <Row gutter={[6, 6]} justify="center">
+              <Col span={6}>
+                <Card size={'small'} className="blur-card" bordered={false} hoverable={true}>
+                  <Space style={{ width: '100%' }} size={15}>
+                    <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
+                    <>成就名</>
+                  </Space>
+                  <Row>
+                    <Progress size="small" percent={(10 / 20) * 100} status="active"
+                      strokeColor={'#3220B9'} />
+                  </Row>
 
-                <Divider type="vertical" />
+                </Card>
+              </Col>
 
-                <Divider type="vertical" />
-              </Space>
+              <Col span={6}>
+                <Card size={'small'} className="blur-card" bordered={false} hoverable={true}>
+                  <Space style={{ width: '100%' }} size={15}>
+                    <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
+                    <>成就名</>
+                  </Space>
+                  <Progress size="small" percent={(10 / 20) * 100} status="active"
+                    strokeColor={'#3220B9'} />
+                </Card>
+              </Col>
+
+              <Col span={6}>
+                <Card size={'small'} className="blur-card" bordered={false} hoverable={true}>
+                  <Space style={{ width: '100%' }} size={15}>
+                    <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
+                    <>成就名</>
+                  </Space>
+                  <Progress size="small" percent={(10 / 20) * 100} status="active"
+                    strokeColor={'#3220B9'} />
+                </Card>
+              </Col>
+
+              <Col span={6}>
+                <Card size={'small'} className="blur-card" bordered={false} hoverable={true}>
+                  <Space style={{ width: '100%' }} size={15}>
+                    <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
+                    <>成就名</>
+                  </Space>
+                  <Progress size="small" percent={(10 / 20) * 100} status="active"
+                    strokeColor={'#3220B9'} />
+                </Card>
+              </Col>
 
 
+            </Row>
 
-
-            </Space>
           </Card>
         </Col>
 

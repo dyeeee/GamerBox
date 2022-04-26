@@ -9,4 +9,11 @@
 }
 
 
+.blur-card {
+  background: rgba(255, 255, 255, .3);
+  backdropFilter: blur(10px)
+}
+
+
+
 /* style={{ background: 'rgba(255, 255, 255, .7)', backdropFilter: 'blur(10px)' }} */
