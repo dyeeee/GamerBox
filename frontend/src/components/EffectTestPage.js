@@ -5,7 +5,7 @@ import { FrownOutlined } from '@ant-design/icons';
 
 import axios from "axios";
 import useGet from "../useGet";
-import { Line } from '@ant-design/plots';
+import { Line, DualAxes } from '@ant-design/plots';
 import gameData from '../gameData.json';
 import "../css/GlobalCSS.css"
 
@@ -134,18 +134,16 @@ const LoginForm = () => {
 }
 
 export default function TestPage1 () {
+  const {data: testdata} = useGet('/api/fetchData/440', []);
+  console.log(testdata)
   const config = {
-    data: gameData,
+    data: [testdata, testdata],
     padding: 'auto',
     xField: 'DateTime',
-    yField: 'Players',
-    xAxis: {
-      // type: 'timeCat',
-      tickCount: 5,
-    },
+    yField: ['Players', 'PlayersTrend'],
   };
 
-  return <Line {...config} />;
+  return <DualAxes {...config} />;
 }
 
 // .target {
