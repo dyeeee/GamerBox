@@ -1,5 +1,5 @@
 import {React, useEffect, useState} from 'react'
-import { Typography, Divider, Space, Card, Row, Col, Image, Spin} from 'antd';
+import { Typography, Divider, Space, Card, Row, Col, Image, Spin, Modal} from 'antd';
 import axios from 'axios';
 const { Title, Paragraph, Text, Link } = Typography;
 
@@ -73,6 +73,7 @@ async function getNews (i){
       oneNews.content = getContent(oneNews.content)
       oneNews.unix = oneNews.date
       oneNews.date = getDate(oneNews.date)
+      oneNews.logo = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + appIdList[i] + '/capsule_231x87.jpg'
       listData.push(oneNews)
     })
     .catch(error => {
@@ -110,41 +111,75 @@ export default function NewsPage () {
     
 }
 
-
 function ShowNews(){
-  return (
-    <Typography>
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
+  // const showDetail = () => {
+  //   setIsModalVisible(true);
+  // };
+  var [temp,setTemp] = useState({id: "", title: "", url:"", author:"", content:"", date:""});
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+
+  // useEffect(() => {}, [temp]);
+
+  return (
+
+    <Typography>
       <Title>News</Title>
       <Divider />
 
       <Space direction="vertical" size="large"  style={{ minWidth: '100%', padding: '0 30px' }}>
-        {listData.map(news => (
-           <Card size="small" hoverable="true"  style={{ height: '220px', minWidth: '100%' }}>
-           <Row  align="top">
-             <Col span={14} style={{background: 'red'}}>
-               <div style={{fontSize: '20px'}}>{news.appName}</div>
-               <div style={{fontSize: '25px', fontWeight: '500', marginTop: '10px',
-              overflow:'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>{news.title}</div>
-               <div style={{marginTop: '5px'}}>{news.date}</div>
-               <div style={{fontSize: '15px', marginTop: '5px', 
-               overflow: 'hidden', textOverflow: 'ellipsis', display:'-webkit-box', webkitBoxOrient:'vertical', webkitLineClamp: '3'}}>{showhtml(news.content)}</div>
-             </Col>
-             <Col span={1} style={{background: 'green'}}>space</Col>
- 
-             <Col span={9} style={{background: 'blue'}}>
-               {
-                 news.img != "" ? <Image src={news.img} style={{height: '195px', paddingLeft: '20px'}}></Image> 
-                 : <Image src="./testimg.png" style={{height: '195px', paddingLeft: '20px'}}></Image>
-               }
-             </Col>
-           </Row>
+        {listData.map((news, index) => (
+           <Card size="small" hoverable="true"  style={{ height: '220px', minWidth: '100%', background: 'rgba(255, 255, 255, .3)'}} onClick={(e) => {
+            e = index;
+            setTemp(listData[e]);
+            // temp = listData[e];
+            console.log(e);
+            console.log(temp);
+            setIsModalVisible(true);
+          }}>
+            <Row  align="top">
+              <Col span={14}>
+                <div style={{display: 'flex', alignItems: 'center', padding: '5px', borderRadius: '5px', background: 'rgba(255, 255, 255, .1)'}}>
+                  <img src={news.logo} style={{width: '15%'}}></img>
+                  <div  style={{width: '2%'}}></div>
+                  <div style={{fontSize: '20px'}}>{news.appName}</div>
+                </div>
+                {/* news title */}
+                <div style={{fontSize: '25px', fontWeight: '500', marginTop: '5px',
+                overflow:'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>{news.title}</div>
+                {/* date */}
+                <div style={{marginTop: '2px', marginBottom: '2px'}}>{news.date}</div>
+                {/* content */}
+                <div style={{fontSize: '15px', marginTop: '5px', maxHeight: '68px',
+                overflow: 'hidden', textOverflow: 'ellipsis', display:'-webkit-box', webkitBoxOrient:'vertical', webkitLineClamp: '3'}}>{showhtml(news.content)}</div>
+              </Col>
+              <Col span={1}></Col>
+  
+              <Col span={9}>
+                {
+                  news.img != "" ? <Image src={news.img} style={{height: '195px', paddingLeft: '20px'}}></Image> 
+                  : <Image src="./testimg.png" style={{height: '195px', paddingLeft: '20px'}}></Image>
+                }
+              </Col>
+            </Row>
          </Card>
         ))}
-
       </Space>
-      
 
+      <Modal className='news-model' title={temp.title} visible={isModalVisible} footer={null} onOk={handleOk} onCancel={handleCancel} 
+            style={{ top: 89}}>
+              
+      </Modal>
+                
     </Typography>
   )
 }
@@ -162,3 +197,4 @@ function ShowLoading() {
 function sortListByDate() {
   listData.sort(function(a, b){return b.unix - a.unix});
 }
+

@@ -1,11 +1,16 @@
-.ant-modal-content {
+.ant-modal-content-1 {
   background: rgba(255, 255, 255, .7);
   backdropFilter: blur(10px)
 }
 
-.ant-modal-header {
+.ant-modal-header-1 {
   background: rgba(255, 0, 0, .7);
   backdropFilter: blur(10px)
+}
+
+.news-model .ant-modal-title {
+  font-size: xx-large;
+
 }
 
 
