@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Tag, Carousel, Progress, List, Button, Input, Spin, Pagination } from 'antd';
+import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Tag, Carousel, Progress, Tooltip, Button, Input, Spin, Pagination } from 'antd';
 import { Liquid } from '@ant-design/charts';
 import { Line, DualAxes } from '@ant-design/plots';
 import "../css/GlobalCSS.css"
@@ -20,6 +20,7 @@ const imgStyle = {
 }
 
 var gameData = null;
+var achievements = null;
 
 async function getGame (uid) {
   await axios.post('/api/steamApi/getGameDetail', { appids: uid })
@@ -32,11 +33,23 @@ async function getGame (uid) {
     )
 };
 
-const curID = 1085660
+async function getAchievements (uid) {
+  await axios.post('/api/steamApi/getAchievementsDetail', { appid: uid })
+    .then(response => {
+      achievements = response.data;
+      console.log(achievements)
+    })
+    .catch(
+      console.log("error")
+    )
+};
+
+const curID = 440
+const ellipsis = true
 
 export default function GameDetailPage1 () {
   const { data: testdata } = useGet('/api/fetchData/' + curID, []);
-  console.log(testdata.length === 0)
+  // console.log(testdata.length === 0)
   const config = {
     data: [testdata, testdata],
     padding: 'auto',
@@ -52,6 +65,7 @@ export default function GameDetailPage1 () {
       setLoading(true);
       try {
         await getGame(curID);
+        await getAchievements(curID);
         setLoading(false);
       } catch {
         setLoading(false);
@@ -89,7 +103,6 @@ export default function GameDetailPage1 () {
                   </Col>
 
                   <Col span={16} >
-
                     <Carousel dotPosition={'right'} autoplay>
                       {
                         gameData.screenshots.map((obj, index) => (
@@ -100,7 +113,6 @@ export default function GameDetailPage1 () {
                         ))
                       }
                     </Carousel>
-
 
                   </Col>
                 </Row>
@@ -162,64 +174,72 @@ export default function GameDetailPage1 () {
 
 
         <Col span={22} >
-          <Card size={'small'}
-            bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
-            <Divider orientation="left">
-              Achievements
-            </Divider>
+          {isLoading ? <Spin /> :
+            <Card size={'small'}
+              bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
+              <Divider orientation="left">
+                Achievements
+              </Divider>
 
-            <Row gutter={[6, 6]} justify="center">
-              <Col span={6}>
-                <Card size={'small'} className="blur-card" bordered={false} hoverable={true}>
-                  <Space style={{ width: '100%' }} size={15}>
-                    <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
-                    <>成就名</>
-                  </Space>
-                  <Row>
-                    <Progress size="small" percent={(10 / 20) * 100} status="active"
-                      strokeColor={'#3220B9'} />
-                  </Row>
+              {/* <Row gutter={[6, 6]} justify="center">
+                <Col span={6}>
+                  <Card size={'small'} className="blur-card" bordered={false} hoverable={true}>
+                    <Space style={{ width: '100%' }} size={15}>
+                      <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
+                      <>成就名</>
+                    </Space>
+                    <Row>
+                      <Progress size="small" percent={(10 / 20) * 100} status="active"
+                        strokeColor={'#3220B9'} />
+                    </Row>
 
-                </Card>
-              </Col>
+                  </Card>
+                </Col>
+              </Row> */}
 
-              <Col span={6}>
-                <Card size={'small'} className="blur-card" bordered={false} hoverable={true}>
-                  <Space style={{ width: '100%' }} size={15}>
-                    <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
-                    <>成就名</>
-                  </Space>
-                  <Progress size="small" percent={(10 / 20) * 100} status="active"
-                    strokeColor={'#3220B9'} />
-                </Card>
-              </Col>
-
-              <Col span={6}>
-                <Card size={'small'} className="blur-card" bordered={false} hoverable={true}>
-                  <Space style={{ width: '100%' }} size={15}>
-                    <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
-                    <>成就名</>
-                  </Space>
-                  <Progress size="small" percent={(10 / 20) * 100} status="active"
-                    strokeColor={'#3220B9'} />
-                </Card>
-              </Col>
-
-              <Col span={6}>
-                <Card size={'small'} className="blur-card" bordered={false} hoverable={true}>
-                  <Space style={{ width: '100%' }} size={15}>
-                    <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
-                    <>成就名</>
-                  </Space>
-                  <Progress size="small" percent={(10 / 20) * 100} status="active"
-                    strokeColor={'#3220B9'} />
-                </Card>
-              </Col>
+              <Row gutter={[6, 6]} justify="center">
+                {
+                  achievements.map((obj, index) => (
+                    <Col span={6}>
+                      <Tooltip placement="top" title={obj.description}>
 
 
-            </Row>
+                        <Card className={'ant-card-small-achive'} size={'small'} bordered={false} hoverable={true}>
+                          <Space style={{ width: '100%' }} size={10}>
+                            <Avatar src={obj.icon} shape="square" />
 
-          </Card>
+
+                            <Text level={6}
+                              style={{ maxWidth: 120 }}
+                              ellipsis={{ rows: 1, expandable: false }}>
+                              {obj.displayName}
+                            </Text>
+
+
+                          </Space>
+                        </Card>
+                      </Tooltip>
+                    </Col>
+
+                  ))
+                }
+
+
+                {/* <Col span={6}>
+                  <Card size={'small'} className="blur-card" bordered={false} hoverable={true} style={{ height: 100 }}>
+                    <Space style={{ width: '100%' }} size={15}>
+                      <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
+                      <Paragraph ellipsis={ellipsis ? { rows: 1, expandable: true, symbol: 'more' } : false}>
+                        {achievements[0].displayName}
+                      </Paragraph>
+                      <h6 style={{ overflow: 'hidden', textOverFlow: 'ellipsis', whiteSpace: 'nowrap' }}>{achievements[0].displayName}</h6>
+                    </Space>
+                  </Card>
+                </Col> */}
+              </Row>
+
+            </Card>
+          }
         </Col>
 
 
@@ -233,6 +253,6 @@ export default function GameDetailPage1 () {
           Data from <Text keyboard>Valve</Text>'s API: <Link href="https://ant.design/">https://ant.design/</Link>
         </Paragraph>
       </Row >
-    </div>
+    </div >
   )
 }

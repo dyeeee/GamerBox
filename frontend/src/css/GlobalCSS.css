@@ -14,6 +14,15 @@
   backdropFilter: blur(10px)
 }
 
+.ant-card-small-achive {
+  background: rgba(255, 255, 255, .3);
+  backdropFilter: blur(10px)
+}
+
+.ant-card-small-achive>.ant-card-body {
+  padding: 2px;
+  height: 36px;
+}
 
 
 /* style={{ background: 'rgba(255, 255, 255, .7)', backdropFilter: 'blur(10px)' }} */
