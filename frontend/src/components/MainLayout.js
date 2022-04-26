@@ -1,7 +1,6 @@
 import React from 'react'
 import { Outlet, Link, useLocation } from "react-router-dom"
 import { Menu, Layout } from 'antd';
-import { CalendarOutlined, CameraOutlined, HomeOutlined, AreaChartOutlined, SettingOutlined, FileDoneOutlined, UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import './MainLayout.css';
 
 
@@ -24,7 +23,7 @@ export default function MainLayout () {
           <Menu.Item key="/RankPage"><Link to='/RankPage'>Rank</Link></Menu.Item>
           <Menu.Item key="/NewsPage"><Link to='/NewsPage'>News</Link></Menu.Item>
           <Menu.Item key="/TestPage1"><Link to='/TestPage1'>Test</Link></Menu.Item>
-          <Menu.Item key="/GameDetailPage1"><Link to='/GameDetailPage1'>GameDetial</Link></Menu.Item>
+          <Menu.Item key="/GameDetailPage1"><Link to='/GameDetailPage1'>GameDetail</Link></Menu.Item>
         </Menu>
       </Header>
       <Content style={{ padding: '25px 200px', marginTop: '64px' }}>

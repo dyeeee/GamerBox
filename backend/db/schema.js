@@ -6,7 +6,8 @@ const gameDataSchema = new Schema({
     DateTime: String,
     Players: Number,
     PlayersTrend: Number,
-    TwitchViewers: Number
+    TwitchViewers: Number,
+    GameID: Number
 });
 
 const GameData = mongoose.model('GameData', gameDataSchema);

@@ -2,9 +2,11 @@ import React, { useRef, useState, useEffect } from 'react'
 import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Progress, List, Button, Input, Spin, Pagination } from 'antd';
 import "../css/PersonalPage.css"
 import axios from "axios";
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import FriendList from './Friend';
 export const AuthContext = React.createContext({});
+
 
 
 const { Title, Paragraph, Text, Link } = Typography;
@@ -43,7 +45,7 @@ async function getCurrentUser (id) {
     })
 };
 
-async function getGameAchievement (gameid) {
+async function getUserBadges (gameid) {
 
 };
 
@@ -139,6 +141,7 @@ export default function PersonalPage () {
                 onSearch={() => {
                   setRefresh(!refresh);
                   setCurID(inputEL.current.input.value);
+                  // history('/PersonalPage/'+curID+'/1',{replace:false});
                   // console.log(inputEL.current.input.value);
                   // console.log(currentUser);
                   //getCurrentUser(inputEL.current.input.value)
@@ -205,7 +208,7 @@ export default function PersonalPage () {
                 ))}
               </Card>
 
-              <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
+              {/* <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                 <Divider orientation="left" plain>
                   好友 66
                 </Divider>
@@ -223,7 +226,12 @@ export default function PersonalPage () {
                     </List.Item>
                   )}
                 />
-              </Card>
+              </Card> */}
+
+              
+              <AuthContext.Provider value={curID}>
+                <FriendList/>
+              </AuthContext.Provider>
 
             </Space>
           </Card>

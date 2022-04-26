@@ -1,7 +1,7 @@
 import {React, useEffect, useState} from 'react'
 import { Typography, Divider, Space, Card, Row, Col, Image, Spin, Modal} from 'antd';
 import axios from 'axios';
-const { Title, Paragraph, Text, Link } = Typography;
+const { Title } = Typography;
 
 const appIdList = [730, 570, 1599340, 578080, 1172470, 1245620, 271590, 1203220, 252490, 440, 431960, 1418630, 1623660, 1085660, 1794680];
 const appName = ["Counter-Strike: Global Offensive", "Dota 2", "Lost Ark", "PUBG: BATTLEFROUDS", "Apex Legends", "ELDEN RING", "Grand Theft Auto V", "NARAKA:BLADPOINT", "Rust", "Team Fortress 2", "Wallpaper Engine", "Dread Hunger", "MIR 4", "Destiny 2", "Vampire Survivors"]
