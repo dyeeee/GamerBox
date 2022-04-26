@@ -4,6 +4,7 @@ import { Liquid } from '@ant-design/charts';
 import { Line, DualAxes } from '@ant-design/plots';
 import "../css/GlobalCSS.css"
 import useGet from "../useGet";
+import axios from "axios";
 
 export const AuthContext = React.createContext({});
 
@@ -18,10 +19,24 @@ const imgStyle = {
   width: '100%'
 }
 
+var gameData = null;
+
+async function getGame (uid) {
+  await axios.post('/api/steamApi/getGameDetail', { appids: uid })
+    .then(response => {
+      gameData = response.data;
+      console.log(gameData.steam_appid)
+    })
+    .catch(
+      console.log("error")
+    )
+};
+
+const curID = 1085660
 
 export default function GameDetailPage1 () {
-  const { data: testdata } = useGet('/api/fetchData/440', []);
-  console.log(testdata)
+  const { data: testdata } = useGet('/api/fetchData/' + curID, []);
+  console.log(testdata.length === 0)
   const config = {
     data: [testdata, testdata],
     padding: 'auto',
@@ -29,86 +44,117 @@ export default function GameDetailPage1 () {
     yField: ['Players', 'PlayersTrend'],
   };
 
+  const [isLoading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(true);
+
+  useEffect(() => {
+    async function fetchData () {
+      setLoading(true);
+      try {
+        await getGame(curID);
+        setLoading(false);
+      } catch {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [refresh]);
+
   return (
     <div style={{ background: `url('../../bg1.jpg')` }}>
       <PageHeader
         className="site-page-header"
         title="Game Detail Page"
-        subTitle={"ID: 527230"}
+        subTitle={isLoading ? "Loading..." : "ID:" + gameData.steam_appid}
       />
 
 
       <Row gutter={[16, 16]} justify="center">
-        <Col span={22} >
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Card bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
-              <Row gutter={[16, 16]}>
-                <Col span={8}>
-                  <Space direction="vertical" style={{ width: '100%' }} >
-                    <Image src={"https://cdn.akamai.steamstatic.com/steam/apps/527230/header_alt_assets_6_schinese.jpg?t=1650562898"} />
-
-                    <Text strong={true}>For the King</Text>
-                    <Text strong={true}>发行日期: </Text>
-                    <Text strong={true}>发行商: </Text>
-                    <Text strong={true}>开发商: </Text>
-
-                  </Space>
-                </Col>
-
-                <Col span={16} >
-
-                  <Carousel dotPosition={'right'} autoplay>
-                    <div>
-                      <img alt="1" style={imgStyle} src="https://cdn.akamai.steamstatic.com/steam/apps/527230/ss_d837da91acf3aee05bee799ae609ae4e8005254d.600x338.jpg?t=1650562898" />
-                    </div>
-                    <div>
-                      <img alt="3" style={imgStyle} src="https://cdn.akamai.steamstatic.com/steam/apps/527230/ss_7a9fb2fcdc70305d7e32d522cefc145f04cb7c7e.600x338.jpg?t=1650562898" />
-                    </div>
-                    <div>
-                      <img alt="4" style={imgStyle} src="https://cdn.akamai.steamstatic.com/steam/apps/527230/ss_4a134d4b37032fe078d3487dfdab547275327dd5.600x338.jpg?t=1650562898" />
-                    </div>
-                  </Carousel>
-
-
-                </Col>
-              </Row>
-
-
-            </Card>
-
-          </Space>
-
-        </Col>
 
         <Col span={22} >
-          <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
-            <Space direction="vertical" style={{ width: '100%' }} size={10}>
+          {isLoading ? <Spin /> :
+            <Space direction="vertical" style={{ width: '100%' }}>
+              <Card bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
+                <Row gutter={[16, 16]}>
+                  <Col span={8}>
+                    <Space direction="vertical" style={{ width: '100%' }} >
+                      <Image src={gameData.header_image} />
 
-              <Col span={24}>
-                <Divider orientation="left">
-                  Genres
-                </Divider>
-                <Tag color="magenta">冒险</Tag>
-                <Tag color="red">独立</Tag>
-                <Tag color="volcano">角色扮演</Tag>
-                <Tag color="orange">策略</Tag>
-              </Col>
+                      <Text strong={true}>{gameData.name}</Text>
+                      <Text strong={true}>Release Date: {gameData.release_date.date}</Text>
+                      <Text strong={true}>Publisher: {gameData.publishers[0]}</Text>
+                      <Text strong={true}>Developer: {gameData.developers[0]}</Text>
+
+                    </Space>
+                  </Col>
+
+                  <Col span={16} >
+
+                    <Carousel dotPosition={'right'} autoplay>
+                      {
+                        gameData.screenshots.map((obj, index) => (
+                          index > 4 ? <></> :
+                            <div>
+                              <img alt={index} style={imgStyle} src={obj.path_thumbnail} />
+                            </div>
+                        ))
+                      }
+                    </Carousel>
 
 
+                  </Col>
+                </Row>
 
-              <Col span={24}>
-                <Divider orientation="left">
-                  Description
-                </Divider>
-                <Text>《为了吾王》是一款结合桌游和 roguelike 类型元素的跨界策略 RPG 游戏。可以单机进行单人游戏或者在线多人合作。培养你的角色，极致发挥你的战术和策略。游戏支持中文。</Text>
-              </Col>
+
+              </Card>
 
             </Space>
-          </Card>
+          }
         </Col>
 
 
-        {testdata != null ? <Col span={22} >
+
+
+        <Col span={22} >
+          {isLoading ? <Spin /> :
+            <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
+              <Space direction="vertical" style={{ width: '100%' }} size={10}>
+
+                <Col span={24}>
+                  <Divider orientation="left">
+                    Genres
+                  </Divider>
+
+
+                  {
+                    gameData.genres.map((obj, index) => (
+
+                      <Tag color="magenta">{obj.description}</Tag>
+
+                    ))
+                  }
+
+                  {/* <Tag color="magenta">冒险</Tag>
+                  <Tag color="red">独立</Tag>
+                  <Tag color="volcano">角色扮演</Tag>
+                  <Tag color="orange">策略</Tag> */}
+                </Col>
+
+
+
+                <Col span={24}>
+                  <Divider orientation="left">
+                    Description
+                  </Divider>
+                  <Text>{gameData.short_description}</Text>
+                </Col>
+
+              </Space>
+            </Card>}
+        </Col>
+
+
+        {testdata.length !== 0 ? <Col span={22} >
           <Card className="blur-card" size={'small'} bordered={false} hoverable={false} >
             <DualAxes {...config} />
           </Card>
