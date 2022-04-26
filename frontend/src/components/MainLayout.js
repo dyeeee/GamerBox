@@ -1,7 +1,6 @@
 import React from 'react'
 import { Outlet, Link, useLocation } from "react-router-dom"
 import { Menu, Layout } from 'antd';
-import { CalendarOutlined, CameraOutlined, HomeOutlined, AreaChartOutlined, SettingOutlined, FileDoneOutlined, UserOutlined, LaptopOutlined, NotificationOutlined } from '@ant-design/icons';
 import './MainLayout.css';
 
 
