@@ -55,7 +55,7 @@ export default function RankPage () {
   //window.location.reload(false);
   return (
     <div>
-      {isLoading ? <ShowLoding /> : <ShowGameRank />}
+      {isLoading ? <ShowLoading /> : <ShowGameRank />}
     </div>
   )
   
@@ -107,7 +107,7 @@ function ShowGameRank(){
   )
 }
 
-function ShowLoding(){
+function ShowLoading(){
   return (
     <div style = {{textAlign: 'center'}}>
       <Space size = "large">
