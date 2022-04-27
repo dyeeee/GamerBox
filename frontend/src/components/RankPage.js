@@ -2,7 +2,7 @@ import {React, useEffect, useState} from 'react'
 import { Typography, List, Spin, Space, Image} from 'antd';
 import axios from 'axios';
 
-const { Title, Paragraph, Text, Link } = Typography;
+const { Title} = Typography;
 
 const appIdList = [730, 570, 1599340, 578080, 1172470, 1245620, 271590, 1203220, 252490, 440, 431960, 1418630, 1623660, 1085660, 1794680];
 const appName = ["Counter-Strike: Global Offensive", "Dota 2", "Lost Ark", "PUBG: BATTLEFROUDS", "Apex Legends", "ELDEN RING", "Grand Theft Auto V", "NARAKA:BLADPOINT", "Rust", "Team Fortress 2", "Wallpaper Engine", "Dread Hunger", "MIR 4", "Destiny 2", "Vampire Survivors"]
@@ -93,7 +93,7 @@ function ShowGameRank(){
               title= {<font size="5">{'#' + item.index}</font>}
             /> */}
             <List.Item.Meta
-             title= {<a href={item.avatar} target = "_blank"><font size="4">{item.name}</font></a>}
+             title= {<a href={"/GameDetailPage/"+item.appid} target = "_blank" rel='noreferrer'><font size="4">{item.name}</font></a>}
             />
             <List.Item.Meta
               title = {<font size="4">{"Current user: "+item.currentUser}</font>}

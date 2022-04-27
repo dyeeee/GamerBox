@@ -5,6 +5,7 @@ import { Line, DualAxes } from '@ant-design/plots';
 import "../css/GlobalCSS.css"
 import useGet from "../useGet";
 import axios from "axios";
+import { useParams } from 'react-router-dom';
 
 export const AuthContext = React.createContext({});
 
@@ -44,10 +45,11 @@ async function getAchievements (uid) {
     )
 };
 
-const curID = 440
 const ellipsis = true
 
 export default function GameDetailPage1 () {
+  const params = useParams();
+  const curID = params.id;
   const { data: testdata } = useGet('/api/fetchData/' + curID, []);
   // console.log(testdata.length === 0)
   const config = {

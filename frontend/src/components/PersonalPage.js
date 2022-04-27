@@ -45,9 +45,6 @@ async function getCurrentUser (id) {
     })
 };
 
-async function getUserBadges (gameid) {
-
-};
 
 async function getUserLevel (uid) {
   await axios.post('/api/steamApi/getUserLevel', { steamids: uid })
@@ -88,8 +85,6 @@ async function getGamesLibrary (uid) {
       ]
     })
 };
-
-
 
 
 export default function PersonalPage () {

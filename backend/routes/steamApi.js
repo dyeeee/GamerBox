@@ -129,13 +129,10 @@ router.post('/getAchievements', async (req, res) => {
     .then(response => {
       res.json(response.data.playerstats.achievements);
     })
-        .then(response =>{
-            res.json(response.data.playerstats.achievements);
-        })
-        .catch(error => {
-            res.json({})
-            console.log(error);
-        });
+    .catch(error => {
+        res.json({})
+        console.log(error);
+    });
 })
 
 //get global achievement percentages for app
@@ -233,7 +230,7 @@ router.post('/getUserLevel', async(req, res) =>{
 //GameDetail
 router.post('/getGameDetail', async (req, res) => {
   const appids = req.body.appids;
-  let api = 'https://store.steampowered.com/api/appdetails?key=C29734B137600548FE00C77906A76EE5&l=english&appids=' + appids;
+  let api = 'https://store.steampowered.com/api/appdetails?key=C29734B137600548FE00C77906A76EE5&cc=us&l=english&appids=' + appids;
   console.log(api);
   axios.get(api, {
     retry: 5,
@@ -241,6 +238,7 @@ router.post('/getGameDetail', async (req, res) => {
     timeout: 6000
   })
     .then(response => {
+      console.log(response.data);
       res.json(response.data[appids].data);
     })
     .catch(error => {

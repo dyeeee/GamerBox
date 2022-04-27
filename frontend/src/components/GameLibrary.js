@@ -129,7 +129,7 @@ export default function GameLibrary() {
                         </Col>
                         <Col span={17}>
                           <Row justify="start" style={{ padding: '6px 0px 10px 0px' }}>
-                            <Text strong="true">{os.name}</Text>
+                            <Text strong="true"><a href={"/GameDetailPage/"+os.appid} target = "_blank" rel='noreferrer' style={{color: "black"}}>{os.name}</a></Text>
                           </Row>
                           <Row justify="end">
                             <Text type="secondary">总游玩时长{Math.round(os.playtime*10)/10}小时</Text>
