@@ -13,6 +13,9 @@ export const AuthContext = React.createContext({});
 const { Title, Paragraph, Text, Link } = Typography;
 const { Search } = Input;
 
+const tagColor = ["magenta", "red", "volcano", "orange", "gold", "lime", "green", "cyan", "blue", "geekblue"]
+const tagColor2 = ["#2db7f5", "#87d068", "#108ee9"]
+
 
 const imgStyle = {
   height: '100%',
@@ -105,13 +108,13 @@ export default function GameDetailPage1 () {
                   </Col>
 
                   <Col span={16} >
-                    <Carousel dotPosition={'right'} autoplay>
+                    <Carousel autoplay>
                       {
                         gameData.screenshots.map((obj, index) => (
-                          index > 4 ? <></> :
-                            <div>
-                              <img alt={index} style={imgStyle} src={obj.path_thumbnail} />
-                            </div>
+
+                          <div>
+                            <img alt={index} style={imgStyle} src={obj.path_thumbnail} />
+                          </div>
                         ))
                       }
                     </Carousel>
@@ -136,17 +139,15 @@ export default function GameDetailPage1 () {
 
                 <Col span={24}>
                   <Divider orientation="left">
-                    Genres
+                    Genres and Categories
                   </Divider>
-
-
-                  {
-                    gameData.genres.map((obj, index) => (
-
-                      <Tag color="magenta">{obj.description}</Tag>
-
-                    ))
-                  }
+                  <Row gutter={[10, 10]}>
+                    {
+                      gameData.genres.map((obj, index) => (
+                        <Tag color={tagColor2[parseInt(Math.random() * tagColor2.length)]}>{obj.description}</Tag>
+                      ))
+                    }
+                  </Row>
 
                   {/* <Tag color="magenta">冒险</Tag>
                   <Tag color="red">独立</Tag>
@@ -154,6 +155,15 @@ export default function GameDetailPage1 () {
                   <Tag color="orange">策略</Tag> */}
                 </Col>
 
+                <Col span={24}>
+                  <Row gutter={[10, 10]}>
+                    {
+                      gameData.categories.map((obj, index) => (
+                        <Tag color={tagColor[parseInt(Math.random() * tagColor.length)]}>{obj.description}</Tag>
+                      ))
+                    }
+                  </Row>
+                </Col>
 
 
                 <Col span={24}>
@@ -161,6 +171,9 @@ export default function GameDetailPage1 () {
                     Description
                   </Divider>
                   <Text>{gameData.short_description}</Text>
+                  <>
+                    {showhtml(gameData.about_the_game)}
+                  </>
                 </Col>
 
               </Space>
@@ -257,4 +270,9 @@ export default function GameDetailPage1 () {
       </Row >
     </div >
   )
+}
+
+function showhtml (htmlString) {
+  var html = { __html: htmlString };
+  return <div dangerouslySetInnerHTML={html}></div>;
 }
