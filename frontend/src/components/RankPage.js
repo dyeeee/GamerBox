@@ -1,5 +1,6 @@
 import {React, useEffect, useState} from 'react'
 import { Typography, List, Spin, Space, Image} from 'antd';
+import { Bar, Column } from '@ant-design/plots';
 import axios from 'axios';
 
 const { Title} = Typography;
@@ -62,10 +63,19 @@ export default function RankPage () {
 }
 
 function ShowGameRank(){
+  const config = {
+    data: listData,
+    xField: 'name',
+    yField: 'currentUser',
+    seriesField: 'name',
+    legend: {
+      position: 'top-left',
+    },
+  };
   return (
     <Typography>
       <Title>RankPage</Title>
-
+      <Column {...config}/>
       <List
         //itemLayout="vertical"
         size="small"
