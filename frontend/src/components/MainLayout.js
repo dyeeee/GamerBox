@@ -21,7 +21,7 @@ export default function MainLayout () {
           <Menu.Item key="/HomePage"><Link to='/'>GamerBox</Link></Menu.Item>
           <Menu.Item key="/PersonalPage"><Link to='/PersonalPage/76561198302224528/1'>Personal</Link></Menu.Item>
           <Menu.Item key="/RankPage"><Link to='/RankPage'>Rank</Link></Menu.Item>
-          <Menu.Item key="/NewsPage"><Link to='/NewsPage'>News</Link></Menu.Item>
+          <Menu.Item key="/NewsPage"><Link to='/NewsPage/1'>News</Link></Menu.Item>
           <Menu.Item key="/TestPage1"><Link to='/TestPage1'>Test</Link></Menu.Item>
           <Menu.Item key="/GameDetailPage1"><Link to='/GameDetailPage1'>GameDetail</Link></Menu.Item>
         </Menu>

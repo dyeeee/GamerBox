@@ -19,7 +19,7 @@ function App () {
         <Route path="/PersonalPage/:uid" element={<PersonalPage />} >
           <Route path=":id" element={<GameLibrary />} />
         </Route>
-        <Route path="/NewsPage" element={<NewsPage />} />
+        <Route path="/NewsPage/:nowPage" element={<NewsPage />} />
         <Route path="/RankPage" element={<RankPage />} />
         <Route path="/TestPage1" element={<TestPage1 />} />
         <Route path="/GameDetailPage1" element={<GameDetailPage1 />} />

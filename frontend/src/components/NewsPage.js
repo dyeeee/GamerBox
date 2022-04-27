@@ -1,12 +1,23 @@
 import {React, useEffect, useState} from 'react'
-import { Typography, Divider, Space, Card, Row, Col, Image, Spin, Modal} from 'antd';
+import { Typography, Divider, Space, Card, Row, Col, Image, Spin, Modal, Pagination} from 'antd';
 import axios from 'axios';
+import { useParams } from 'react-router-dom'
+
 const { Title } = Typography;
 
 const appIdList = [730, 570, 1599340, 578080, 1172470, 1245620, 271590, 1203220, 252490, 440, 431960, 1418630, 1623660, 1085660, 1794680];
 const appName = ["Counter-Strike: Global Offensive", "Dota 2", "Lost Ark", "PUBG: BATTLEFROUDS", "Apex Legends", "ELDEN RING", "Grand Theft Auto V", "NARAKA:BLADPOINT", "Rust", "Team Fortress 2", "Wallpaper Engine", "Dread Hunger", "MIR 4", "Destiny 2", "Vampire Survivors"]
+// const appIdList = [730]
+// const appName = ["Counter-Strike: Global Offensive"]
+const feedString = "PCGamesN"
+
+//每个游戏读取多少条
+const count = 2
+//每页显示多少条
+var pageCount = 5
 
 var listData = []
+var currentPageData = []
 
 function getImg(text){
   let reg = /<img.*?src=[\"|\'](.*?)[\"|\'].*?>/
@@ -27,7 +38,7 @@ function getImg(text){
   }
 }
 
-function getContent(text) {
+function getSummary(text) {
   let reg = /<img.*?src=[\"|\'](.*?)[\"|\'].*?>/
   const value = text.replace(reg, '')
   return value
@@ -63,35 +74,45 @@ function showhtml(htmlString){
 }
 
 async function getNews (i){
-    await axios.post('/api/steamApi/getNews', {appid: appIdList[i], count:'1' })
+    await axios.post('/api/steamApi/getNews', {appid: appIdList[i], count:count, feeds: feedString })
     .then(response => {
       console.log(response.data);
       const manyNews = response.data.map(news => ({id: news.gid, title: news.title, url:news.url, author:news.author, content:news.contents, date:news.date}));
-      const oneNews = manyNews[0]
-      oneNews.appName = appName[i]
-      oneNews.img = getImg(oneNews.content)
-      oneNews.content = getContent(oneNews.content)
-      oneNews.unix = oneNews.date
-      oneNews.date = getDate(oneNews.date)
-      oneNews.logo = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + appIdList[i] + '/capsule_231x87.jpg'
-      listData.push(oneNews)
+      manyNews.forEach(oneNews => {
+        oneNews.appName = appName[i]
+        oneNews.img = getImg(oneNews.content)
+        oneNews.summary = getSummary(oneNews.content)
+        oneNews.unix = oneNews.date
+        oneNews.date = getDate(oneNews.date)
+        oneNews.logo = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + appIdList[i] + '/capsule_231x87.jpg'
+        listData.push(oneNews)
+      });
     })
     .catch(error => {
       console.log(error);
     })
 };
 
+//slice(0,5) 切割array的函数，包括开头，不包括结尾 0,5 就是0-4
+async function paging(listData, nowPage, pageCount){
+  const start = (nowPage - 1)  * pageCount;
+  return listData.slice(start, nowPage * pageCount);
+}
+
 export default function NewsPage () {
   const[isLoading, setLoading] = useState();
+  const pageParams = useParams();
 
   useEffect(() => {
     async function fetchData(){
       setLoading(true);
       try{
-        listData.length = 0;
-        for(let i = 0; i < 10; i++){
-          await getNews(i);
+        if(listData.length == 0){
+          for(let i = 0; i < appIdList.length; i++){
+            await getNews(i);
+          }
         }
+        currentPageData = await paging(listData, pageParams.nowPage, pageCount)
         setLoading(false);
       } catch{
         setLoading(false);
@@ -113,10 +134,8 @@ export default function NewsPage () {
 
 function ShowNews(){
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const pageParams = useParams();
 
-  // const showDetail = () => {
-  //   setIsModalVisible(true);
-  // };
   var [temp,setTemp] = useState({id: "", title: "", url:"", author:"", content:"", date:""});
 
   const handleOk = () => {
@@ -127,9 +146,6 @@ function ShowNews(){
     setIsModalVisible(false);
   };
 
-
-  // useEffect(() => {}, [temp]);
-
   return (
 
     <Typography>
@@ -137,10 +153,10 @@ function ShowNews(){
       <Divider />
 
       <Space direction="vertical" size="large"  style={{ minWidth: '100%', padding: '0 30px' }}>
-        {listData.map((news, index) => (
+        {currentPageData.map((news, index) => (
            <Card size="small" hoverable="true"  style={{ height: '220px', minWidth: '100%', background: 'rgba(255, 255, 255, .3)'}} onClick={(e) => {
             e = index;
-            setTemp(listData[e]);
+            setTemp(currentPageData[e]);
             // temp = listData[e];
             console.log(e);
             console.log(temp);
@@ -158,9 +174,9 @@ function ShowNews(){
                 overflow:'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>{news.title}</div>
                 {/* date */}
                 <div style={{marginTop: '2px', marginBottom: '2px'}}>{news.date}</div>
-                {/* content */}
+                {/* summary*/}
                 <div style={{fontSize: '15px', marginTop: '5px', maxHeight: '68px',
-                overflow: 'hidden', textOverflow: 'ellipsis', display:'-webkit-box', webkitBoxOrient:'vertical', webkitLineClamp: '3'}}>{showhtml(news.content)}</div>
+                overflow: 'hidden', textOverflow: 'ellipsis', display:'-webkit-box', webkitBoxOrient:'vertical', webkitLineClamp: '3'}}>{showhtml(news.summary)}</div>
               </Col>
               <Col span={1}></Col>
   
@@ -173,11 +189,18 @@ function ShowNews(){
             </Row>
          </Card>
         ))}
+
+        <div style={{textAlign: 'center'}}>
+          <Pagination defaultCurrent={pageParams.nowPage} total={listData.length} defaultPageSize={pageCount} showSizeChanger={false} onChange={page => {
+              window.location.href = '/NewsPage/' + page;
+          }} />
+        </div>
+
       </Space>
 
       <Modal className='news-model' title={temp.title} visible={isModalVisible} footer={null} onOk={handleOk} onCancel={handleCancel} 
-            style={{ top: 89}}>
-              
+            style={{ top: 89}} width={1000}>
+            <div>{showhtml(temp.content)}</div>
       </Modal>
                 
     </Typography>
