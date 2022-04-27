@@ -22,7 +22,7 @@ function App () {
         <Route path="/NewsPage/:nowPage" element={<NewsPage />} />
         <Route path="/RankPage" element={<RankPage />} />
         <Route path="/TestPage1" element={<TestPage1 />} />
-        <Route path="/GameDetailPage1" element={<GameDetailPage1 />} />
+        <Route path="/GameDetailPage/:id" element={<GameDetailPage1 />} />
 
 
       </Route>

@@ -97,21 +97,22 @@ router.post('/getUserInfo', async (req, res) => {
 
 // Gets user's friend list
 router.post('/getFriendList', async (req, res) => {
-    //这个api返回结果就是一个json，所以可以直接用res.send       且可以直接访问json中的各节点
-    let api = 'https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=C29734B137600548FE00C77906A76EE5&steamid=';
-    const steamids = req.body.steamids;
-    console.log(api+steamids)
-    axios.get(api+steamids,{
-        retry: 5,
-        retryDelay: 1000,
-        timeout: 6000
+  //这个api返回结果就是一个json，所以可以直接用res.send       且可以直接访问json中的各节点
+  let api = 'https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=C29734B137600548FE00C77906A76EE5&steamid=';
+  const steamids = req.body.steamids;
+  console.log(api + steamids)
+  axios.get(api + steamids, {
+    retry: 5,
+    retryDelay: 1000,
+    timeout: 6000
+  })
+    .then(response => {
+      res.json(response.data.friendslist.friends);
     })
-        .then(response =>{
-            res.json(response.data.friendslist.friends);
-        })
-        .catch(error => {
-            console.log(error);
-        });
+    .catch(error => {
+      res.json({})
+      console.log(error);
+    });
 });
 
 //成就部分:
@@ -123,20 +124,17 @@ router.post('/getAchievements', async (req, res) => {
   let api = 'https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key=C29734B137600548FE00C77906A76EE5&steamid=' + steamids + '&appid=' + appid;
   console.log(api);
   axios.get(api, {
-    retry: 5,
+    retry: 3,
     retryDelay: 1000,
     timeout: 6000
   })
     .then(response => {
       res.json(response.data.playerstats.achievements);
     })
-        .then(response =>{
-            res.json(response.data.playerstats.achievements);
-        })
-        .catch(error => {
-            res.json({})
-            console.log(error);
-        });
+    .catch(error => {
+      res.json(error.response.data.playerstats)
+      console.log(error.response.data.playerstats);
+    });
 })
 
 //get global achievement percentages for app
@@ -213,28 +211,9 @@ router.post('/getUserLevel', async (req, res) => {
 })
 
 //user's steam badge
-router.post('/getUserLevel', async(req, res) =>{
-    const steamids = req.body.steamids;
-    let api = 'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=C29734B137600548FE00C77906A76EE5&steamid='+steamids;
-    console.log(api);
-    axios.get(api,{
-        retry: 5,
-        retryDelay: 1000,
-        timeout: 6000
-    })
-        .then(response =>{
-            res.json(response.data.response.player_level);
-        })
-        .catch(error => {
-            res.status(404).send('Not Found')
-        });
-})
-
-
-//GameDetail
-router.post('/getGameDetail', async (req, res) => {
-  const appids = req.body.appids;
-  let api = 'https://store.steampowered.com/api/appdetails?key=C29734B137600548FE00C77906A76EE5&l=english&appids=' + appids;
+router.post('/getUserLevel', async (req, res) => {
+  const steamids = req.body.steamids;
+  let api = 'https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key=C29734B137600548FE00C77906A76EE5&steamid=' + steamids;
   console.log(api);
   axios.get(api, {
     retry: 5,
@@ -242,6 +221,26 @@ router.post('/getGameDetail', async (req, res) => {
     timeout: 6000
   })
     .then(response => {
+      res.json(response.data.response.player_level);
+    })
+    .catch(error => {
+      res.status(404).send('Not Found')
+    });
+})
+
+
+//GameDetail
+router.post('/getGameDetail', async (req, res) => {
+  const appids = req.body.appids;
+  let api = 'https://store.steampowered.com/api/appdetails?key=C29734B137600548FE00C77906A76EE5&cc=us&l=english&appids=' + appids;
+  console.log(api);
+  axios.get(api, {
+    retry: 5,
+    retryDelay: 1000,
+    timeout: 6000
+  })
+    .then(response => {
+      // console.log(response.data);
       res.json(response.data[appids].data);
     })
     .catch(error => {

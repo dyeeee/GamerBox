@@ -1,8 +1,8 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Progress, List, Button, Input, Spin, Pagination } from 'antd';
+import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Badge, List, Button, Input, Spin, Pagination } from 'antd';
 import "../css/PersonalPage.css"
 import axios from "axios";
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import FriendList from './Friend';
 export const AuthContext = React.createContext({});
@@ -17,6 +17,7 @@ var currentUser = null;
 var gameArray = [];
 var game_count = 0;
 var level = 0;
+const personalState = ["Offline", "Online", "Busy", "Away", "Snooze", "looking to trade", "looking to play"]
 
 async function getCurrentUser (id) {
   await axios.post('/api/steamApi/getUserInfo', { steamids: id })
@@ -27,6 +28,7 @@ async function getCurrentUser (id) {
         currentUser = {
           pname: "invalid id",
           avatarURL: "../../Clefairy.png",
+
         }
         // console.log(currentUser);
         return
@@ -37,6 +39,9 @@ async function getCurrentUser (id) {
         {
           pname: user.personaname,
           avatarURL: user.avatarfull,
+          personastate: user.personastate,
+          lastlogoff: user.lastlogoff,
+          timecreated: user.timecreated
         }));
       currentUser = userArray[0];
     })
@@ -45,9 +50,6 @@ async function getCurrentUser (id) {
     })
 };
 
-async function getUserBadges (gameid) {
-
-};
 
 async function getUserLevel (uid) {
   await axios.post('/api/steamApi/getUserLevel', { steamids: uid })
@@ -88,8 +90,6 @@ async function getGamesLibrary (uid) {
       ]
     })
 };
-
-
 
 
 export default function PersonalPage () {
@@ -163,14 +163,30 @@ export default function PersonalPage () {
                 <Col span={8}>
                   <Space direction="vertical" style={{ width: '100%' }} size={16}>
                     <Text strong="true">{isLoading ? "Loading..." : currentUser.pname}</Text>
-                    <Text>User Description</Text>
+                    <Space direction="vertical" style={{ width: '100%' }} size={0}>
+                      <Text>Last log off</Text>
+                      <Text strong="true">{isLoading ? "Loading..." : getDate(currentUser.lastlogoff)}</Text>
+
+                    </Space>
+
                   </Space>
                 </Col>
                 <Col span={8}>
                   <Space direction="vertical" style={{ width: '100%' }} size={16}>
-                    <Text strong="true">Level {level}</Text>
-                    <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
-                    {/* <img alt="徽章1" src="https://joeschmoe.io/api/v1/random" /> */}
+                    <Space>
+                      <Text strong="true">Level</Text>
+                      <Badge
+                        count={level}
+                        style={{ backgroundColor: '#52c41a' }}
+                      />
+                    </Space>
+
+                    <Space direction="vertical" style={{ width: '100%' }} size={0}>
+                      <Text>Created since</Text>
+                      <Text strong="true">{isLoading ? "Loading..." : getDate(currentUser.timecreated)}</Text>
+
+                    </Space>
+
                   </Space>
                 </Col>
 
@@ -190,14 +206,14 @@ export default function PersonalPage () {
         <Col span={8} >
           <Card bordered={false} hoverable={true} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
             <Space direction="vertical" style={{ width: '100%' }} size={6}>
-              <Title level={4} style={{ color: '#4CF066' }}>正在线上</Title>
+              <Title level={4} style={{ color: '#4CF066' }}>{isLoading ? "Loading..." : personalState[currentUser.personastate]}</Title>
 
-              <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
+              {/* <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                 <Divider orientation="left" plain>
                   徽章 3
                 </Divider>
                 <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
-              </Card>
+              </Card> */}
 
               <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                 <Divider orientation="left" plain>
@@ -228,9 +244,9 @@ export default function PersonalPage () {
                 />
               </Card> */}
 
-              
+
               <AuthContext.Provider value={curID}>
-                <FriendList/>
+                <FriendList />
               </AuthContext.Provider>
 
             </Space>
@@ -252,18 +268,26 @@ export default function PersonalPage () {
 }
 
 
+function getDate (unix) {
+  //创建一个指定的日期对象
+  var temp_time = new Date(unix * 1000);
+  //取得4位数的年份
+  var year = temp_time.getFullYear();
+  //取得日期中的月份，其中0表示1月，11表示12月
+  var month = temp_time.getMonth() + 1;
+  //小于10月的月份补全0 例如1月补全为01月
+  month = month < 10 ? "0" + month : month;
+  //返回日期月份中的天数（1到31）
+  var day = temp_time.getDate();
+  day = day < 10 ? "0" + day : day;
+  //返回日期中的小时数（0到23）
+  var hour = temp_time.getHours();
+  hour = hour < 10 ? "0" + hour : hour;
+  //返回日期中的分钟数（0到59）
+  var minute = temp_time.getMinutes();
+  minute = minute < 10 ? "0" + minute : minute;
 
-const data = [
-  {
-    title: 'User 1',
-  },
-  {
-    title: 'User 2',
-  },
-  {
-    title: 'User 3',
-  },
-  {
-    title: 'User 4',
-  },
-];
+  //拼接需要的时间格式
+  var result_time = year + "-" + month + "-" + day
+  return result_time
+}
