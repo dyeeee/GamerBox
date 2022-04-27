@@ -7,7 +7,7 @@ import {SmallDashOutlined} from '@ant-design/icons'
 const { Text } = Typography;
 
 
-var gameArray = [];
+
 var count = 0;
 var currentPageData = [];
 //当前页的十个游戏的游戏成就
@@ -15,90 +15,100 @@ var currentPageData = [];
 var gameAchievements = [];
 var CurrentNumberOfPage = 5;
 var NumberOfAchievemnts = [];
-
 let lockAchievement= false;
+var gameArray = [];
 
-async function getGamesLibrary(uid){
-    await axios.post('/api/steamApi/getGamesLibrary', { steamids: uid })
-      .then(response => {
-        const gameData = response.data.games;
-        count = response.data.game_count;
-        gameArray = gameData.map(game => (
-          {
-            appid: game.appid,
-            name: game.name,
-            playtime: game.playtime_forever/60,
-            img_icon: 'http://media.steampowered.com/steamcommunity/public/images/apps/'+game.appid+'/'+game.img_icon_url+'.jpg',
-            img_logo: 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + game.appid + '/header.jpg?t=1649897484',
-            playtimeRecently: !isNaN(game.playtime_2weeks) ? game.playtime_2weeks/60 : 0,
-          }));
-      })
-      .catch(error => {
-        gameArray = [{
-          appid: 730,
-          name: 2,
-          playtime: 60/60,
-          img_icon: 'http://media.steampowered.com/steamcommunity/public/images/apps/'+550+'/'+'7d5a243f9500d2f8467312822f8af2a2928777ed'+'.jpg',
-          img_logo: 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + 550 + '/header.jpg?t=1649897484',
-          playtimeRecently: 0,
-        }, 
-      ]
-      })
-  };
 
-//slice(0,5) 切割array的函数，包括开头，不包括结尾 0,5 就是0-4
-async function paging(gameArray, currentPage){
-    const start = currentPage-CurrentNumberOfPage;
-    return gameArray.slice(start,currentPage);
-}
 
-async function getCurrentPageAchievement(currentPageData, uid){
-  for(let i=0;i<currentPageData.length; i++){
-    await axios.post('/api/steamApi/getAchievementsDetail', {appid: currentPageData[i].appid})
-    .then(response =>{
-      gameAchievements.push(response.data);
-    })
-    .catch(error =>{
-      console.log(error);
-    })
 
-    //找出用户达成的成就数目
-    await axios.post('/api/steamApi/getAchievements', {appid: currentPageData[i].appid, steamids: uid})
-    // eslint-disable-next-line no-loop-func
-    .then(response =>{
-      console.log(response.data)
-      //找出achieved为1的数量
-      let temp = 0;
-      if(response.data.error!=="Profile is not public"){
-        response.data.map(x =>{
-          if(x.achieved === 1){
-            temp++;
-          }
-        })
-      }else{
-        lockAchievement = true;
-      }
-      NumberOfAchievemnts.push(temp);
-    })
-    .catch(error =>{
-      console.log(error);
-    })
-  }
-}
 
 export default function GameLibrary() {
     const curID = useContext(AuthContext);
-    const currentPage = useParams();
+    // const currentPage = useParams();
     const [isLoading, setLoading] = useState(true);
     const [refresh, setRefresh] = useState(true);
-  
+    const [currentPage,setCurrentPage] = useState(1);
 
+    async function getCurrentPageAchievement(currentPageData, uid){
+      for(let i=0;i<currentPageData.length; i++){
+        await axios.post('/api/steamApi/getAchievementsDetail', {appid: currentPageData[i].appid})
+        .then(response =>{
+          gameAchievements.push(response.data);
+        })
+        .catch(error =>{
+          console.log(error);
+        })
+    
+        //找出用户达成的成就数目
+        await axios.post('/api/steamApi/getAchievements', {appid: currentPageData[i].appid, steamids: uid})
+        // eslint-disable-next-line no-loop-func
+        .then(response =>{
+          console.log(response.data)
+          //找出achieved为1的数量
+          let temp = 0;
+          if(response.data.error!=="Profile is not public"){
+            response.data.map(x =>{
+              if(x.achieved === 1){
+                temp++;
+              }
+            })
+          }else{
+            lockAchievement = true;
+          }
+          NumberOfAchievemnts.push(temp);
+        })
+        .catch(error =>{
+          console.log(error);
+        })
+      }
+    }
+
+    async function getGamesLibrary(uid){
+      await axios.post('/api/steamApi/getGamesLibrary', { steamids: uid })
+        .then(response => {
+          const gameData = response.data.games;
+          count = response.data.game_count;
+          gameArray = gameData.map(game => (
+            {
+              appid: game.appid,
+              name: game.name,
+              playtime: game.playtime_forever/60,
+              img_icon: 'http://media.steampowered.com/steamcommunity/public/images/apps/'+game.appid+'/'+game.img_icon_url+'.jpg',
+              img_logo: 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + game.appid + '/header.jpg?t=1649897484',
+              playtimeRecently: !isNaN(game.playtime_2weeks) ? game.playtime_2weeks/60 : 0,
+            }));
+        })
+        .catch(error => {
+          gameArray = [{
+            appid: 730,
+            name: 2,
+            playtime: 60/60,
+            img_icon: 'http://media.steampowered.com/steamcommunity/public/images/apps/'+550+'/'+'7d5a243f9500d2f8467312822f8af2a2928777ed'+'.jpg',
+            img_logo: 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + 550 + '/header.jpg?t=1649897484',
+            playtimeRecently: 0,
+          }, 
+        ]
+        })
+    };
+  
+  //slice(0,5) 切割array的函数，包括开头，不包括结尾 0,5 就是0-4
+  async function paging(gameArray, currentPage){
+      const start = currentPage-CurrentNumberOfPage;
+      return gameArray.slice(start,currentPage);
+  }
+
+  
     useEffect(() => {
       async function fetchData () {
         setLoading(true);
         try {
-          await getGamesLibrary(curID);
-          currentPageData = await paging(gameArray,currentPage.id*CurrentNumberOfPage);
+          if(refresh){
+            await getGamesLibrary(curID);
+            setRefresh(false);
+            // console.log("222")
+          }
+          console.log(currentPage);
+          currentPageData = await paging(gameArray,currentPage*CurrentNumberOfPage);
           await getCurrentPageAchievement(currentPageData,curID);
           setLoading(false);
         } catch {
@@ -106,7 +116,7 @@ export default function GameLibrary() {
         }
       }
       fetchData();
-    }, [refresh,curID]);
+    }, [curID,currentPage]);
   
     // console.log(currentUser);
     // console.log(isLoading);
@@ -190,8 +200,10 @@ export default function GameLibrary() {
                   </Card>
                   ))}
   
-                  <Pagination defaultCurrent={currentPage.id} total={count} defaultPageSize={CurrentNumberOfPage} showSizeChanger={false} onChange={page => {
-                      window.location.href = '/PersonalPage/'+curID+'/'+page;
+                  <Pagination defaultCurrent={currentPage} total={count} defaultPageSize={CurrentNumberOfPage} showSizeChanger={false} onChange={page => {
+                    setCurrentPage(page);
+                    // window.location.href = '/PersonalPage/'+curID+'/'+page;
+                    //'/PersonalPage/'+curID+'/'+
                   }} />
                 </Space>
                 
