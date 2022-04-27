@@ -134,16 +134,32 @@ const LoginForm = () => {
 }
 
 export default function TestPage1 () {
-  const {data: testdata} = useGet('/api/fetchData/440', []);
+  const {data: testdata} = useGet('/api/fetchData', []);
   console.log(testdata)
   const config = {
-    data: [testdata, testdata],
-    padding: 'auto',
+    data: testdata,
     xField: 'DateTime',
-    yField: ['Players', 'PlayersTrend'],
+    yField: 'PlayersTrend',
+    seriesField: 'GameID',
+    yAxis: {
+      label: {
+        formatter: (v) => `${(v / 10e3).toFixed(1)}k`,
+      },
+    },
+    legend: {
+      position: 'top',
+    },
+    smooth: true,
+
+    animation: {
+      appear: {
+        animation: 'path-in',
+        duration: 5000,
+      },
+    },
   };
 
-  return <DualAxes {...config} />;
+  return <Line {...config} />;
 }
 
 // .target {
