@@ -1,5 +1,5 @@
 import {React, useEffect, useState} from 'react'
-import { Typography, List, Spin, Space, Image} from 'antd';
+import { Typography, List, Spin, Space, Image, Divider} from 'antd';
 import { Bar, Column } from '@ant-design/plots';
 import axios from 'axios';
 
@@ -75,7 +75,9 @@ function ShowGameRank(){
   return (
     <Typography>
       <Title>RankPage</Title>
+      <Divider />
       <Column {...config}/>
+      <Divider orientation="left">Most Played Games</Divider>
       <List
         //itemLayout="vertical"
         size="small"
