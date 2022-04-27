@@ -43,8 +43,9 @@ router.post('/getNews', async (req, res) => {
   //这个api返回结果就是一个json，所以可以直接用res.send       且可以直接访问json中的各节点
   const appid = req.body.appid;
   const count = req.body.count;
-  console.log('https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?access_token=51cff501b898a0d16c3b287284c04e48&appid=' + appid + '&count=' + count)
-  axios.get('https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?access_token=51cff501b898a0d16c3b287284c04e48&appid=' + appid + '&count=' + count, {
+  const feeds = req.body.feeds;
+  console.log('https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?access_token=51cff501b898a0d16c3b287284c04e48&appid=' + appid + '&count=' + count + '&feeds=' + feeds)
+  axios.get('https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/?access_token=51cff501b898a0d16c3b287284c04e48&appid=' + appid + '&count=' + count + '&feeds=' + feeds, {
     retry: 5,
     retryDelay: 1000,
     timeout: 6000
