@@ -1,7 +1,8 @@
 import { AuthContext } from './PersonalPage';
 import React, { useState, useEffect, useContext } from 'react'
-import { Typography, Row, Col, Card, Space, Avatar, Image, List, Divider, Spin } from 'antd';
+import { Typography, Card, Space, Avatar, List, Divider, Spin } from 'antd';
 import axios from "axios";
+const { Text } = Typography;
 
 var UserArray = [];
 var friendsL = [];
@@ -12,6 +13,7 @@ async function getCurrentUser (id, friendsL) {
       .then(response => {
         const userData = response.data;
         UserArray.push({
+          steamid: friendsL[i].steamid,
           pname: userData[0].personaname,
           avatar: userData[0].avatar,
           friend_since: friendsL[i].friend_since
@@ -61,12 +63,20 @@ export default function Friend () {
     fetchData();
   }, [refresh, curID]);
 
+  const NoA = () => (
+    <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
+      <Text>This user hide his/her friendList</Text>
+    </Card>
+  )
+
 
   const ShowFriendList = () => (
     <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
       <Divider orientation="left" plain>
         好友 {UserArray.length}
       </Divider>
+
+      {friendsL.length===0 ? <NoA/> : 
       <List
         size="small"
         itemLayout="horizontal"
@@ -75,12 +85,13 @@ export default function Friend () {
           <List.Item>
             <List.Item.Meta
               avatar={<Avatar src={item.avatar} />}
-              title={<a href="https://ant.design">{item.pname}</a>}
+              title={<a href={"/PersonalPage/"+item.steamid+"/1"} target = "_blank" rel='noreferrer'>{item.pname}</a>}
               description={"Since: " + getDate(item.friend_since)}
             />
           </List.Item>
         )}
-      />
+      />}
+
     </Card>
   )
 

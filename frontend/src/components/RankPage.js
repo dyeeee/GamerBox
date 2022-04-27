@@ -1,6 +1,6 @@
 import {React, useEffect, useState} from 'react'
 import { Typography, List, Spin, Space, Image, Divider} from 'antd';
-import { Bar, Column } from '@ant-design/plots';
+import { Column } from '@ant-design/plots';
 import axios from 'axios';
 
 const { Title} = Typography;
@@ -126,7 +126,6 @@ function ShowLoading(){
         <Spin tip="Loading..." size = "large"/>
       </Space>
     </div>
-
   )
 }
 

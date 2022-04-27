@@ -16,6 +16,8 @@ var gameAchievements = [];
 var CurrentNumberOfPage = 5;
 var NumberOfAchievemnts = [];
 
+let lockAchievement= false;
+
 async function getGamesLibrary(uid){
     await axios.post('/api/steamApi/getGamesLibrary', { steamids: uid })
       .then(response => {
@@ -59,17 +61,23 @@ async function getCurrentPageAchievement(currentPageData, uid){
     .catch(error =>{
       console.log(error);
     })
+
     //找出用户达成的成就数目
     await axios.post('/api/steamApi/getAchievements', {appid: currentPageData[i].appid, steamids: uid})
+    // eslint-disable-next-line no-loop-func
     .then(response =>{
-      console.log(NumberOfAchievemnts)
+      console.log(response.data)
       //找出achieved为1的数量
       let temp = 0;
-      response.data.map(x =>{
-        if(x.achieved === 1){
-          temp++;
-        }
-      })
+      if(response.data.error!=="Profile is not public"){
+        response.data.map(x =>{
+          if(x.achieved === 1){
+            temp++;
+          }
+        })
+      }else{
+        lockAchievement = true;
+      }
       NumberOfAchievemnts.push(temp);
     })
     .catch(error =>{
@@ -109,6 +117,14 @@ export default function GameLibrary() {
       playtime_2w += game.playtimeRecently;
     })
 
+    const NoA = () => (
+      <Card bordered={false} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
+        <Text>This user hide his/her achievement</Text>
+      </Card>
+    )
+
+
+
     const ShowGameLibrary = () => (
       <Card bordered={false} hoverable={true} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
                 <Space direction="vertical" style={{ width: '100%' }} size={16}>
@@ -120,7 +136,6 @@ export default function GameLibrary() {
                   </Card>
   
                   {currentPageData.map((os, index) => (
-  
                     <Card bordered={false} hoverable={true} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }} key={index}>
                     <Space direction="vertical" style={{ width: '100%' }} size={10}>
                       <Row gutter={16}>
@@ -139,8 +154,7 @@ export default function GameLibrary() {
                           </Row>
                         </Col>
                       </Row>
-  
-                      <Card bordered={false} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
+                      {lockAchievement ? <NoA/> : <Card bordered={false} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                         <Row gutter={5}>
                           <Col span={5}>
                             <Text type="secondary">成就进度 {NumberOfAchievemnts[index]}/{gameAchievements[index].length == null ? 0 : gameAchievements[index].length}</Text>
@@ -169,6 +183,8 @@ export default function GameLibrary() {
                           </Col>
                         </Row>
                       </Card>
+                      }
+                      
   
                     </Space>
                   </Card>

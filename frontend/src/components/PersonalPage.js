@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect } from 'react'
 import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Badge, List, Button, Input, Spin, Pagination } from 'antd';
 import "../css/PersonalPage.css"
 import axios from "axios";
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import FriendList from './Friend';
 export const AuthContext = React.createContext({});

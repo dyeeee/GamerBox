@@ -109,6 +109,7 @@ router.post('/getFriendList', async (req, res) => {
       res.json(response.data.friendslist.friends);
     })
     .catch(error => {
+      res.json({})
       console.log(error);
     });
 });
@@ -122,7 +123,7 @@ router.post('/getAchievements', async (req, res) => {
   let api = 'https://api.steampowered.com/ISteamUserStats/GetPlayerAchievements/v1/?key=C29734B137600548FE00C77906A76EE5&steamid=' + steamids + '&appid=' + appid;
   console.log(api);
   axios.get(api, {
-    retry: 5,
+    retry: 3,
     retryDelay: 1000,
     timeout: 6000
   })
@@ -130,8 +131,8 @@ router.post('/getAchievements', async (req, res) => {
       res.json(response.data.playerstats.achievements);
     })
     .catch(error => {
-      res.json({})
-      console.log(error);
+      res.json(error.response.data.playerstats)
+      console.log(error.response.data.playerstats);
     });
 })
 
