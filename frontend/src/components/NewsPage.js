@@ -176,7 +176,7 @@ export default function NewsPage () {
                 <Col span={9}>
                   {
                     news.img != "" ? <Image src={news.img} style={{height: '195px', paddingLeft: '20px'}}></Image> 
-                    : <Image src="./testimg.png" style={{height: '195px', paddingLeft: '20px'}}></Image>
+                    : <Image src="./noimg.svg" style={{height: '195px', paddingLeft: '20px'}}></Image>
                   }
                 </Col>
               </Row>
