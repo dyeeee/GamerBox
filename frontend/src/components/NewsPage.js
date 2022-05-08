@@ -94,35 +94,112 @@ async function getNews (i){
 };
 
 //slice(0,5) 切割array的函数，包括开头，不包括结尾 0,5 就是0-4
-async function paging(listData, nowPage, pageCount){
-  const start = (nowPage - 1)  * pageCount;
-  return listData.slice(start, nowPage * pageCount);
+async function paging(listData, currentPage, pageCount){
+  const start = (currentPage - 1)  * pageCount;
+  return listData.slice(start, currentPage * pageCount);
 }
 
 export default function NewsPage () {
-  const[isLoading, setLoading] = useState();
-  const pageParams = useParams();
+  const [isLoading, setLoading] = useState(true)
+  const [refresh, setRefresh] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     async function fetchData(){
       setLoading(true);
       try{
-        if(listData.length == 0){
+        if(refresh){
           for(let i = 0; i < appIdList.length; i++){
             await getNews(i);
           }
+          setRefresh(false)
         }
-        currentPageData = await paging(listData, pageParams.nowPage, pageCount)
+        currentPageData = await paging(listData, currentPage, pageCount)
         setLoading(false);
       } catch{
         setLoading(false);
       }
     }
     fetchData();
-  }, []);
+  }, [currentPage]);
   
   // 按日期排序！
   sortListByDate();
+
+  const ShowNews = ()=> {
+    const [isModalVisible, setIsModalVisible] = useState(false)
+  
+    var [temp,setTemp] = useState({id: "", title: "", url:"", author:"", content:"", date:""});
+  
+    const handleOk = () => {
+      setIsModalVisible(false);
+    };
+  
+    const handleCancel = () => {
+      setIsModalVisible(false);
+    };
+  
+    return (
+  
+      <Typography>
+        <Title>News</Title>
+        <Divider />
+  
+        <Space direction="vertical" size="large"  style={{ minWidth: '100%', padding: '0 30px' }}>
+          {currentPageData.map((news, index) => (
+             <Card size="small" hoverable="true"  style={{ height: '220px', minWidth: '100%', background: 'rgba(255, 255, 255, .3)'}} onClick={(e) => {
+              e = index;
+              setTemp(currentPageData[e]);
+              // temp = listData[e];
+              console.log(e);
+              console.log(temp);
+              setIsModalVisible(true);
+            }}>
+              <Row  align="top">
+                <Col span={14}>
+                  <div style={{display: 'flex', alignItems: 'center', padding: '5px', borderRadius: '5px', background: 'rgba(255, 255, 255, .1)'}}>
+                    <img src={news.logo} style={{width: '15%'}}></img>
+                    <div  style={{width: '2%'}}></div>
+                    <div style={{fontSize: '20px'}}>{news.appName}</div>
+                  </div>
+                  {/* news title */}
+                  <div style={{fontSize: '25px', fontWeight: '500', marginTop: '5px',
+                  overflow:'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>{news.title}</div>
+                  {/* date */}
+                  <div style={{marginTop: '2px', marginBottom: '2px'}}>{news.date}</div>
+                  {/* summary*/}
+                  <div style={{fontSize: '15px', marginTop: '5px', maxHeight: '68px',
+                  overflow: 'hidden', textOverflow: 'ellipsis', display:'-webkit-box', webkitBoxOrient:'vertical', webkitLineClamp: '3'}}>{showhtml(news.summary)}</div>
+                </Col>
+                <Col span={1}></Col>
+    
+                <Col span={9}>
+                  {
+                    news.img != "" ? <Image src={news.img} style={{height: '195px', paddingLeft: '20px'}}></Image> 
+                    : <Image src="./noimg.svg" style={{height: '195px', paddingLeft: '20px'}}></Image>
+                  }
+                </Col>
+              </Row>
+           </Card>
+          ))}
+  
+          <div style={{textAlign: 'center'}}>
+            <Pagination defaultCurrent={currentPage} total={listData.length} defaultPageSize={pageCount} showSizeChanger={false} onChange={page => {
+                setCurrentPage(page)
+                // window.location.href = '/NewsPage/' + page;
+            }} />
+          </div>
+  
+        </Space>
+  
+        <Modal className='news-model' title={temp.title} visible={isModalVisible} footer={null} onOk={handleOk} onCancel={handleCancel} 
+              style={{ top: 89}} width={1000}>
+              <div>{showhtml(temp.content)}</div>
+        </Modal>
+                  
+      </Typography>
+    )
+  }
 
   return (
     <div>
@@ -132,80 +209,7 @@ export default function NewsPage () {
     
 }
 
-function ShowNews(){
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const pageParams = useParams();
 
-  var [temp,setTemp] = useState({id: "", title: "", url:"", author:"", content:"", date:""});
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
-  return (
-
-    <Typography>
-      <Title>News</Title>
-      <Divider />
-
-      <Space direction="vertical" size="large"  style={{ minWidth: '100%', padding: '0 30px' }}>
-        {currentPageData.map((news, index) => (
-           <Card size="small" hoverable="true"  style={{ height: '220px', minWidth: '100%', background: 'rgba(255, 255, 255, .3)'}} onClick={(e) => {
-            e = index;
-            setTemp(currentPageData[e]);
-            // temp = listData[e];
-            console.log(e);
-            console.log(temp);
-            setIsModalVisible(true);
-          }}>
-            <Row  align="top">
-              <Col span={14}>
-                <div style={{display: 'flex', alignItems: 'center', padding: '5px', borderRadius: '5px', background: 'rgba(255, 255, 255, .1)'}}>
-                  <img src={news.logo} style={{width: '15%'}}></img>
-                  <div  style={{width: '2%'}}></div>
-                  <div style={{fontSize: '20px'}}>{news.appName}</div>
-                </div>
-                {/* news title */}
-                <div style={{fontSize: '25px', fontWeight: '500', marginTop: '5px',
-                overflow:'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>{news.title}</div>
-                {/* date */}
-                <div style={{marginTop: '2px', marginBottom: '2px'}}>{news.date}</div>
-                {/* summary*/}
-                <div style={{fontSize: '15px', marginTop: '5px', maxHeight: '68px',
-                overflow: 'hidden', textOverflow: 'ellipsis', display:'-webkit-box', webkitBoxOrient:'vertical', webkitLineClamp: '3'}}>{showhtml(news.summary)}</div>
-              </Col>
-              <Col span={1}></Col>
-  
-              <Col span={9}>
-                {
-                  news.img != "" ? <Image src={news.img} style={{height: '195px', paddingLeft: '20px'}}></Image> 
-                  : <Image src="./testimg.png" style={{height: '195px', paddingLeft: '20px'}}></Image>
-                }
-              </Col>
-            </Row>
-         </Card>
-        ))}
-
-        <div style={{textAlign: 'center'}}>
-          <Pagination defaultCurrent={pageParams.nowPage} total={listData.length} defaultPageSize={pageCount} showSizeChanger={false} onChange={page => {
-              window.location.href = '/NewsPage/' + page;
-          }} />
-        </div>
-
-      </Space>
-
-      <Modal className='news-model' title={temp.title} visible={isModalVisible} footer={null} onOk={handleOk} onCancel={handleCancel} 
-            style={{ top: 89}} width={1000}>
-            <div>{showhtml(temp.content)}</div>
-      </Modal>
-                
-    </Typography>
-  )
-}
 
 function ShowLoading() {
   return (
