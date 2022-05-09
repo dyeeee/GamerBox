@@ -6,9 +6,15 @@ const { Text } = Typography;
 
 var UserArray = [];
 var friendsL = [];
+var NumberFriendList = 0;
 
 async function getCurrentUser (id, friendsL) {
-  for (let i = 0; i < friendsL.length; i++) {
+  if(friendsL.length >=6){
+    NumberFriendList = 6;
+  }else{
+    NumberFriendList = friendsL.length;
+  }
+  for (let i = 0; i < NumberFriendList; i++) {
     await axios.post('/api/steamApi/getUserInfo', { steamids: friendsL[i].steamid })
       .then(response => {
         const userData = response.data;

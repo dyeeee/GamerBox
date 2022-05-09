@@ -1,12 +1,23 @@
 import {React, useEffect, useState} from 'react'
-import { Typography, Divider, Space, Card, Row, Col, Image, Spin, Modal} from 'antd';
+import { Typography, Divider, Space, Card, Row, Col, Image, Spin, Modal, Pagination} from 'antd';
 import axios from 'axios';
+import { useParams } from 'react-router-dom'
+
 const { Title } = Typography;
 
 const appIdList = [730, 570, 1599340, 578080, 1172470, 1245620, 271590, 1203220, 252490, 440, 431960, 1418630, 1623660, 1085660, 1794680];
 const appName = ["Counter-Strike: Global Offensive", "Dota 2", "Lost Ark", "PUBG: BATTLEFROUDS", "Apex Legends", "ELDEN RING", "Grand Theft Auto V", "NARAKA:BLADPOINT", "Rust", "Team Fortress 2", "Wallpaper Engine", "Dread Hunger", "MIR 4", "Destiny 2", "Vampire Survivors"]
+// const appIdList = [730]
+// const appName = ["Counter-Strike: Global Offensive"]
+const feedString = "PCGamesN"
+
+//每个游戏读取多少条
+const count = 2
+//每页显示多少条
+var pageCount = 5
 
 var listData = []
+var currentPageData = []
 
 function getImg(text){
   let reg = /<img.*?src=[\"|\'](.*?)[\"|\'].*?>/
@@ -27,7 +38,7 @@ function getImg(text){
   }
 }
 
-function getContent(text) {
+function getSummary(text) {
   let reg = /<img.*?src=[\"|\'](.*?)[\"|\'].*?>/
   const value = text.replace(reg, '')
   return value
@@ -63,45 +74,132 @@ function showhtml(htmlString){
 }
 
 async function getNews (i){
-    await axios.post('/api/steamApi/getNews', {appid: appIdList[i], count:'1' })
+    await axios.post('/api/steamApi/getNews', {appid: appIdList[i], count:count, feeds: feedString })
     .then(response => {
       console.log(response.data);
       const manyNews = response.data.map(news => ({id: news.gid, title: news.title, url:news.url, author:news.author, content:news.contents, date:news.date}));
-      const oneNews = manyNews[0]
-      oneNews.appName = appName[i]
-      oneNews.img = getImg(oneNews.content)
-      oneNews.content = getContent(oneNews.content)
-      oneNews.unix = oneNews.date
-      oneNews.date = getDate(oneNews.date)
-      oneNews.logo = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + appIdList[i] + '/capsule_231x87.jpg'
-      listData.push(oneNews)
+      manyNews.forEach(oneNews => {
+        oneNews.appName = appName[i]
+        oneNews.img = getImg(oneNews.content)
+        oneNews.summary = getSummary(oneNews.content)
+        oneNews.unix = oneNews.date
+        oneNews.date = getDate(oneNews.date)
+        oneNews.logo = 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + appIdList[i] + '/capsule_231x87.jpg'
+        listData.push(oneNews)
+      });
     })
     .catch(error => {
       console.log(error);
     })
 };
 
+//slice(0,5) 切割array的函数，包括开头，不包括结尾 0,5 就是0-4
+async function paging(listData, currentPage, pageCount){
+  const start = (currentPage - 1)  * pageCount;
+  return listData.slice(start, currentPage * pageCount);
+}
+
 export default function NewsPage () {
-  const[isLoading, setLoading] = useState();
+  const [isLoading, setLoading] = useState(true)
+  const [refresh, setRefresh] = useState(true)
+  const [currentPage, setCurrentPage] = useState(1)
 
   useEffect(() => {
     async function fetchData(){
       setLoading(true);
       try{
-        listData.length = 0;
-        for(let i = 0; i < 10; i++){
-          await getNews(i);
+        if(refresh){
+          for(let i = 0; i < appIdList.length; i++){
+            await getNews(i);
+          }
+          setRefresh(false)
         }
+        currentPageData = await paging(listData, currentPage, pageCount)
         setLoading(false);
       } catch{
         setLoading(false);
       }
     }
     fetchData();
-  }, []);
+  }, [currentPage]);
   
   // 按日期排序！
   sortListByDate();
+
+  const ShowNews = ()=> {
+    const [isModalVisible, setIsModalVisible] = useState(false)
+  
+    var [temp,setTemp] = useState({id: "", title: "", url:"", author:"", content:"", date:""});
+  
+    const handleOk = () => {
+      setIsModalVisible(false);
+    };
+  
+    const handleCancel = () => {
+      setIsModalVisible(false);
+    };
+  
+    return (
+  
+      <Typography>
+        <Title>News</Title>
+        <Divider />
+  
+        <Space direction="vertical" size="large"  style={{ minWidth: '100%', padding: '0 30px' }}>
+          {currentPageData.map((news, index) => (
+             <Card size="small" hoverable="true"  style={{ height: '220px', minWidth: '100%', background: 'rgba(255, 255, 255, .3)'}} onClick={(e) => {
+              e = index;
+              setTemp(currentPageData[e]);
+              // temp = listData[e];
+              console.log(e);
+              console.log(temp);
+              setIsModalVisible(true);
+            }}>
+              <Row  align="top">
+                <Col span={14}>
+                  <div style={{display: 'flex', alignItems: 'center', padding: '5px', borderRadius: '5px', background: 'rgba(255, 255, 255, .1)'}}>
+                    <img src={news.logo} style={{width: '15%'}}></img>
+                    <div  style={{width: '2%'}}></div>
+                    <div style={{fontSize: '20px'}}>{news.appName}</div>
+                  </div>
+                  {/* news title */}
+                  <div style={{fontSize: '25px', fontWeight: '500', marginTop: '5px',
+                  overflow:'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>{news.title}</div>
+                  {/* date */}
+                  <div style={{marginTop: '2px', marginBottom: '2px'}}>{news.date}</div>
+                  {/* summary*/}
+                  <div style={{fontSize: '15px', marginTop: '5px', maxHeight: '68px',
+                  overflow: 'hidden', textOverflow: 'ellipsis', display:'-webkit-box', webkitBoxOrient:'vertical', webkitLineClamp: '3'}}>{showhtml(news.summary)}</div>
+                </Col>
+                <Col span={1}></Col>
+    
+                <Col span={9}>
+                  {
+                    news.img != "" ? <Image src={news.img} style={{height: '195px', paddingLeft: '20px'}}></Image> 
+                    : <Image src="./noimg.svg" style={{height: '195px', paddingLeft: '20px'}}></Image>
+                  }
+                </Col>
+              </Row>
+           </Card>
+          ))}
+  
+          <div style={{textAlign: 'center'}}>
+            <Pagination defaultCurrent={currentPage} total={listData.length} defaultPageSize={pageCount} showSizeChanger={false} onChange={page => {
+                setCurrentPage(page)
+                // window.location.href = '/NewsPage/' + page;
+            }} />
+          </div>
+  
+        </Space>
+  
+        <Modal className='news-model' title={temp.title} visible={isModalVisible} footer={null} onOk={handleOk} onCancel={handleCancel} 
+              style={{ top: 89}} width={1000}>
+              <div>{showhtml(temp.content)}</div>
+        </Modal>
+                  
+      </Typography>
+    )
+  }
 
   return (
     <div>
@@ -111,78 +209,7 @@ export default function NewsPage () {
     
 }
 
-function ShowNews(){
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  // const showDetail = () => {
-  //   setIsModalVisible(true);
-  // };
-  var [temp,setTemp] = useState({id: "", title: "", url:"", author:"", content:"", date:""});
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
-
-  // useEffect(() => {}, [temp]);
-
-  return (
-
-    <Typography>
-      <Title>News</Title>
-      <Divider />
-
-      <Space direction="vertical" size="large"  style={{ minWidth: '100%', padding: '0 30px' }}>
-        {listData.map((news, index) => (
-           <Card size="small" hoverable="true"  style={{ height: '220px', minWidth: '100%', background: 'rgba(255, 255, 255, .3)'}} onClick={(e) => {
-            e = index;
-            setTemp(listData[e]);
-            // temp = listData[e];
-            console.log(e);
-            console.log(temp);
-            setIsModalVisible(true);
-          }}>
-            <Row  align="top">
-              <Col span={14}>
-                <div style={{display: 'flex', alignItems: 'center', padding: '5px', borderRadius: '5px', background: 'rgba(255, 255, 255, .1)'}}>
-                  <img src={news.logo} style={{width: '15%'}}></img>
-                  <div  style={{width: '2%'}}></div>
-                  <div style={{fontSize: '20px'}}>{news.appName}</div>
-                </div>
-                {/* news title */}
-                <div style={{fontSize: '25px', fontWeight: '500', marginTop: '5px',
-                overflow:'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis'}}>{news.title}</div>
-                {/* date */}
-                <div style={{marginTop: '2px', marginBottom: '2px'}}>{news.date}</div>
-                {/* content */}
-                <div style={{fontSize: '15px', marginTop: '5px', maxHeight: '68px',
-                overflow: 'hidden', textOverflow: 'ellipsis', display:'-webkit-box', webkitBoxOrient:'vertical', webkitLineClamp: '3'}}>{showhtml(news.content)}</div>
-              </Col>
-              <Col span={1}></Col>
-  
-              <Col span={9}>
-                {
-                  news.img != "" ? <Image src={news.img} style={{height: '195px', paddingLeft: '20px'}}></Image> 
-                  : <Image src="./testimg.png" style={{height: '195px', paddingLeft: '20px'}}></Image>
-                }
-              </Col>
-            </Row>
-         </Card>
-        ))}
-      </Space>
-
-      <Modal className='news-model' title={temp.title} visible={isModalVisible} footer={null} onOk={handleOk} onCancel={handleCancel} 
-            style={{ top: 89}}>
-              
-      </Modal>
-                
-    </Typography>
-  )
-}
 
 function ShowLoading() {
   return (

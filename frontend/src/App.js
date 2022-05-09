@@ -17,7 +17,7 @@ function App () {
         <Route index element={<HomePage />} />
 
         <Route path="/PersonalPage/:uid" element={<PersonalPage />} >
-          <Route path=":id" element={<GameLibrary />} />
+          <Route index element={<GameLibrary />} />
         </Route>
         <Route path="/NewsPage" element={<NewsPage />} />
         <Route path="/RankPage" element={<RankPage />} />

@@ -8,11 +8,21 @@
   backdropFilter: blur(10px)
 }
 
-.news-model .ant-modal-title {
-  font-size: xx-large;
-
+.news-model img {
+  width: 90%;
+  height: auto;
+  margin-left: 5%;
+  margin-bottom: 20px;
 }
 
+.news-model div { 
+  font-size: 20px;
+}
+
+.news-model .ant-modal-title {
+  font-size: xx-large !important;
+  line-height: 150%;
+}
 
 .blur-card {
   background: rgba(255, 255, 255, .3);
