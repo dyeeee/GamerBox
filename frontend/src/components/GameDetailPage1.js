@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
-import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Tag, Carousel, Progress, Tooltip, Button, Input, Spin, Pagination } from 'antd';
+import { Typography, Divider, PageHeader, Row, Col, Card, Space, Avatar, Image, Tag, Carousel, Skeleton, Tooltip, Button, Input, Spin, Pagination } from 'antd';
 import { Liquid } from '@ant-design/charts';
 import { Line, DualAxes } from '@ant-design/plots';
 import "../css/GlobalCSS.css"
@@ -179,6 +179,7 @@ export default function GameDetailPage1 () {
               </Space>
             </Card>}
         </Col>
+
 
 
         {testdata.length !== 0 ? <Col span={22} >
