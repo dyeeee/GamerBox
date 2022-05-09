@@ -1,14 +1,35 @@
 import React from 'react'
+import { useState, useEffect, useContext } from 'react'
 import usePost from '../usePost';
 import { Typography, Divider, Space, Card, Row, Col, Image, Spin, Modal, Carousel, List, message, Avatar} from 'antd';
 import RankList from './RankList';
+import axios from 'axios';
+
 const { Title } = Typography;
 const {Meta} = Card;
+
+const appIdList = [730, 570, 1599340, 578080, 1172470, 1245620, 271590, 1203220, 252490, 440, 431960, 1418630, 1623660, 1085660, 1794680];
+const appName = ["Counter-Strike: Global Offensive", "Dota 2", "Lost Ark", "PUBG: BATTLEFROUDS", "Apex Legends", "ELDEN RING", "Grand Theft Auto V", "NARAKA:BLADPOINT", "Rust", "Team Fortress 2", "Wallpaper Engine", "Dread Hunger", "MIR 4", "Destiny 2", "Vampire Survivors"]
+var CurrentPlayersNum = null;
+var GameName = null;
+
 
 function showhtml(htmlString){
   var html = {__html:htmlString};
   return <div dangerouslySetInnerHTML={html}></div>;
 }
+
+async function getCurrentUsers (index){
+  await axios.post('/api/steamApi/getOnlinePlayer', {appid: appIdList[index] })
+  .then(response => {
+    CurrentPlayersNum = response.data;
+    GameName = appName[index];
+    console.log(response.data);
+  })
+  .catch(error => {
+    console.log(error);
+  })
+};
 
 //This is the homepage, use <Typography> to typography the content.
 export default function HomePage() {
@@ -20,6 +41,24 @@ export default function HomePage() {
     background: '#364d79',
   };
 
+  const [isLoading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(true);
+
+  const a = Math.round(Math.random() * (14));
+
+  useEffect(() => {
+    async function fetchData () {
+      setLoading(true);
+      try {
+        await getCurrentUsers(a)
+        setLoading(false);
+      } catch {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, [refresh]);
+
   return (
   
     <Typography>
@@ -30,7 +69,7 @@ export default function HomePage() {
           Hello! This is title</div>
           
         {/* 可能的在线人数 */}
-        <div style={{fontSize: '30px', fontWeight: '500', marginTop: '1%'}}><span style={{color: '#f6622a'}}>000, 000, 000</span> users online</div>
+        <div style={{fontSize: '30px', fontWeight: '500', marginTop: '1%'}}><span style={{color: '#f6622a'}}>{CurrentPlayersNum}</span> users are playing {GameName}</div>
       </div>
 
       <Row style={{marginTop: '5%'}} gutter={32} align="top">

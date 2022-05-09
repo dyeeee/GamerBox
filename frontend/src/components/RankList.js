@@ -1,55 +1,124 @@
 import React, { useState, useEffect } from 'react';
-import { List, message, Avatar } from 'antd';
+import { List, message, Avatar, Typography, Spin, Space, Image, Divider } from 'antd';
+import { Column } from '@ant-design/plots';
+import axios from 'axios';
 import VirtualList from 'rc-virtual-list';
 
-const fakeDataUrl =
-  'https://randomuser.me/api/?results=20&inc=name,gender,email,nat,picture&noinfo';
-const ContainerHeight = 400;
+const { Title} = Typography;
+const ContainerHeight = 200;
 
-const RankList = () => {
-  const [data, setData] = useState([]);
+const appIdList = [730, 570, 1599340, 578080, 1172470]
+const appName = ["Counter-Strike: Global Offensive", "Dota 2", "Lost Ark", "PUBG: BATTLEFROUDS", "Apex Legends"]
 
-  const appendData = () => {
-    fetch(fakeDataUrl)
-      .then(res => res.json())
-      .then(body => {
-        setData(data.concat(body.results));
-        message.success(`${body.results.length} more items loaded!`);
-      });
-  };
+var listData = []
+
+async function getCurrentUsers (i){
+  await axios.post('/api/steamApi/getOnlinePlayer', {appid: appIdList[i] })
+  .then(response => {
+    console.log(response.data);
+    listData.push({
+      appid: appIdList[i],
+      avatar: 'https://cdn.cloudflare.steamstatic.com/steam/apps/' + appIdList[i] + '/header.jpg?t=1649897484',
+      name: appName[i],
+      currentUser: response.data
+    });
+  })
+  .catch(error => {
+    console.log(error);
+  })
+};
+
+export default function RankPage () {
+  //listData.length = 0;
+  // for(let i = 0; i < 10; i++){
+  //   getCurrentUsers(i);
+  // }
+  const[isLoading, setLoading] = useState();
 
   useEffect(() => {
-    appendData();
-  }, []);
-
-  const onScroll = e => {
-    if (e.target.scrollHeight - e.target.scrollTop === ContainerHeight) {
-      appendData();
+    async function fetchData(){
+      setLoading(true);
+      try{
+        listData.length = 0;
+        for(let i = 0; i < 5; i++){
+          await getCurrentUsers(i);
+        }
+        setLoading(false);
+      } catch{
+        setLoading(false);
+      }
     }
-  };
+    fetchData();
+  }, []);
+  
+  sortList();
 
+  //console.log(listData);
+  //window.location.reload(false);
   return (
-    <List bordered="true">
+    <div>
+      {isLoading ? <ShowLoading /> : <ShowGameRank />}
+    </div>
+  )
+  
+}
+
+function ShowGameRank(){
+  // return (
+  //   <Typography>
+  //     <List
+        
+  //       itemLayout="horizontal"
+  //       bordered = "true"
+  //       dataSource={listData}
+  //       renderItem={item => (
+          
+  //         <List.Item>
+  //           <List.Item.Meta
+  //            avater = {<Image src="https://joeschmoe.io/api/v1/random" />}
+  //            title= {<a href={"/GameDetailPage/"+item.appid} target = "_blank" rel='noreferrer'>{item.name}</a>}
+  //            description = {item.currentUser}
+  //           />
+  //         </List.Item>
+          
+  //       )}
+  //     />
+  //   </Typography>
+  // )
+  return (
+    <List>
       <VirtualList
-        data={data}
+        data={listData}
         height={ContainerHeight}
-        itemHeight={47}
-        itemKey="email"
-        onScroll={onScroll}
+        itemHeight={10}
+        itemKey="name"
+        //onScroll={onScroll}
       >
         {item => (
-          <List.Item key={item.email}>
+          <List.Item key={item.name}>
             <List.Item.Meta
-              avatar={<Avatar src={item.picture.large} />}
-              title={<a href="https://ant.design">{item.name.last}</a>}
-              description={item.email}
+              avatar={<Avatar src={item.avatar} />}
+              title={<a href={"/GameDetailPage/"+item.appid} target = "_blank" rel='noreferrer'><font size="3">{item.name}</font></a>}
+              description={<font size="3">{item.currentUser}</font>}
             />
-            <div>Content</div>
           </List.Item>
         )}
       </VirtualList>
     </List>
   );
-};
+}
 
-export default () => <RankList />;
+function ShowLoading(){
+  return (
+    <div style = {{textAlign: 'center'}}>
+      <Space size = "large">
+        <Spin tip="Loading..." size = "large"/>
+      </Space>
+    </div>
+  )
+}
+
+function sortList(){
+  console.log(listData);
+  listData.sort(function(a, b){return b.currentUser - a.currentUser});
+}
