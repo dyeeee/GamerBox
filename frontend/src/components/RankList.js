@@ -5,7 +5,7 @@ import axios from 'axios';
 import VirtualList from 'rc-virtual-list';
 
 const { Title} = Typography;
-const ContainerHeight = 200;
+const ContainerHeight = "100%";
 
 const appIdList = [730, 570, 1599340, 578080, 1172470]
 const appName = ["Counter-Strike: Global Offensive", "Dota 2", "Lost Ark", "PUBG: BATTLEFROUDS", "Apex Legends"]
@@ -40,7 +40,7 @@ export default function RankPage () {
       setLoading(true);
       try{
         listData.length = 0;
-        for(let i = 0; i < 5; i++){
+        for(let i = 0; i < appIdList.length; i++){
           await getCurrentUsers(i);
         }
         setLoading(false);
@@ -86,7 +86,7 @@ function ShowGameRank(){
   //   </Typography>
   // )
   return (
-    <List>
+    <List bordered = "true">
       <VirtualList
         data={listData}
         height={ContainerHeight}
@@ -99,7 +99,7 @@ function ShowGameRank(){
             <List.Item.Meta
               avatar={<Avatar src={item.avatar} />}
               title={<a href={"/GameDetailPage/"+item.appid} target = "_blank" rel='noreferrer'><font size="3">{item.name}</font></a>}
-              description={<font size="3">{item.currentUser}</font>}
+              description={<font size="3">{item.currentUser} users online</font>}
             />
           </List.Item>
         )}
