@@ -15,7 +15,7 @@ export default function MainLayout () {
     <Layout className="layout">
       <Header style={{ position: 'fixed', width: '100%', zIndex: '100000' }}>
         <div className="logo" style={{ float: 'left', marginLeft: '-30px' }}>
-          <img src='favicon.ico' height='32' alt='' />
+          <img src='logo1.png' height='48' alt='' />
         </div>
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} style={{ marginLeft: '300px' }}>
           <Menu.Item key="/HomePage"><Link to='/'>GamerBox</Link></Menu.Item>
