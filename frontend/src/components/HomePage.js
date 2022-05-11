@@ -41,6 +41,10 @@ export default function HomePage() {
 
   const a = Math.round(Math.random() * (14));
 
+  function toWeb(url){
+    window.location.href = url;
+  }
+
   useEffect(() => {
     async function fetchData () {
       setLoading(true);
@@ -56,15 +60,15 @@ export default function HomePage() {
 
   return (
   
-    <Typography>
+    <Typography style={{marginTop:"-70px"}}>
       {/* Background of Title */}
-      <div style={{textAlign: 'center'}}>
+      <div style={{textAlign: 'center', backgroundImage:"url('./bg1.jpg')"}}>
         {/* Title */}
-        <div style={{fontSize: '70px', fontWeight: '500', marginTop: '5%'}}>
-          Hello! This is title</div>
+        <div style={{fontSize: '70px', fontWeight: '500', marginTop: '5%', color: '#ffffff'}}>
+        Hello! This is title</div>
           
         {/* 可能的在线人数 */}
-        <div style={{fontSize: '30px', fontWeight: '500', marginTop: '1%'}}><span style={{color: '#f6622a'}}>{currentPlayersNum}</span> users are playing {gameName}</div>
+        <div style={{fontSize: '30px', fontWeight: '500', marginTop: '1%', color: '#ffffff'}}><span style={{color: '#f6622a'}}>{currentPlayersNum}</span> users are playing {gameName}</div>
       </div>
 
       <Row style={{marginTop: '5%'}} gutter={32} align="top">
@@ -100,30 +104,30 @@ export default function HomePage() {
         <Col span={6}>
           <Card
             hoverable
-            style={{}}
-            cover={<img alt="example" src="./noimg.svg" />}
+            style={{border: '1px solid #d9d9d9'}}
+            cover={<img alt="example" src="./BGNews.png" onClick={()=>{toWeb("/NewsPage")}}/>}
           >
-            <Meta title="Europe Street beat" description="www.instagram.com" />
+            <Meta title="News" />
           </Card>
         </Col>
 
         <Col span={6}>
           <Card
             hoverable
-            style={{}}
-            cover={<img alt="example" src="./noimg.svg" />}
+            style={{border: '1px solid #d9d9d9'}}
+            cover={<img alt="example" src="./BGPerson.png" onClick={()=>{toWeb("/PersonalPage/76561198302224528")}}/>}
           >
-            <Meta title="Europe Street beat" description="www.instagram.com" />
+            <Meta title="Personal" />
           </Card>
         </Col>
         
         <Col span={6}>
           <Card
             hoverable
-            style={{}}
-            cover={<img alt="example" src="./noimg.svg" />}
+            style={{border: '1px solid #d9d9d9'}}
+            cover={<img alt="example" src="./BGPopular.png" onClick={()=>{toWeb("/RankPage")}}/>}
           >
-            <Meta title="Europe Street beat" description="www.instagram.com" />
+            <Meta title="Popular" />
           </Card>
         </Col>
 
@@ -135,3 +139,4 @@ export default function HomePage() {
     </Typography>
   )
 }
+
