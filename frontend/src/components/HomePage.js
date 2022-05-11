@@ -62,34 +62,20 @@ export default function HomePage() {
   
     <Typography style={{marginTop:"-70px"}}>
       {/* Background of Title */}
-      <div style={{textAlign: 'center', backgroundImage:"url('./bg1.jpg')"}}>
+      <div style={{textAlign: 'center', backgroundImage:"url('./bg1.jpg')", marginTop:"-99px", marginLeft:"-24px", marginRight:"-24px", paddingTop:"3%", paddingBottom:"5%"}}>
         {/* Title */}
         <div style={{fontSize: '70px', fontWeight: '500', marginTop: '5%', color: '#ffffff'}}>
-        Hello! This is title</div>
+        Welcome to Game Box!</div>
           
         {/* 可能的在线人数 */}
         <div style={{fontSize: '30px', fontWeight: '500', marginTop: '1%', color: '#ffffff'}}><span style={{color: '#f6622a'}}>{currentPlayersNum}</span> users are playing {gameName}</div>
       </div>
 
-      <Row style={{marginTop: '5%'}} gutter={32} align="top">
+      <Row style={{marginTop: '1%'}} gutter={32} align="top">
         {/* News */}
         <Col span={11} offset={3}>
           <div style={{fontSize: '30px', fontWeight: '400', marginBottom: "1%"}}><a href='/NewsPage' className='my-link'>News</a></div>
           <NewsCarousel></NewsCarousel>
-          {/* <Carousel autoplay>
-            <div>
-              <h3 style={contentStyle}>{test[1]}</h3>
-            </div>
-            <div>
-              <h3 style={contentStyle}>{test[2]}</h3>
-            </div>
-            <div>
-              <h3 style={contentStyle}>{test[3]}</h3>
-            </div>
-            <div>
-              <h3 style={contentStyle}>{test[0]}</h3>
-            </div>
-          </Carousel> */}
         </Col>
 
         {/* Rank */}
