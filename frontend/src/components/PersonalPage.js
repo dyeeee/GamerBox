@@ -202,22 +202,15 @@ export default function PersonalPage () {
 
         </Col>
 
-        {/* 右侧 */}
+        {/* right side */}
         <Col span={8} >
           <Card bordered={false} hoverable={true} style={{ background: 'rgba(255, 255, 255, .3)', backdropFilter: 'blur(10px)' }}>
             <Space direction="vertical" style={{ width: '100%' }} size={6}>
               <Title level={4} style={{ color: '#4CF066' }}>{isLoading ? "Loading..." : personalState[currentUser.personastate]}</Title>
 
-              {/* <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
-                <Divider orientation="left" plain>
-                  徽章 3
-                </Divider>
-                <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
-              </Card> */}
-
               <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                 <Divider orientation="left" plain>
-                  游戏 {game_count}
+                  All Games {game_count}
                 </Divider>
                 {gameArray.map(os => (
                   <Avatar src={os.img_icon} shape="square" />
@@ -226,7 +219,7 @@ export default function PersonalPage () {
 
               {/* <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                 <Divider orientation="left" plain>
-                  好友 66
+                  Friends 66
                 </Divider>
                 <List
                   size="small"
