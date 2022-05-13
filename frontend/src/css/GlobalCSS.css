@@ -39,5 +39,18 @@
   height: 36px;
 }
 
+.my-link {
+  color: #262626 !important;
+}
 
-/* style={{ background: 'rgba(255, 255, 255, .7)', backdropFilter: 'blur(10px)' }} */
+.my-link:hover{
+  color: #8a1dcf !important;
+}
+
+.ant-card-meta-title {
+  font-size: large !important;
+}
+
+.ant-card-meta-description {
+  font-size: large !important;
+}

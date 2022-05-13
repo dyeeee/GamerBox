@@ -20,9 +20,8 @@ export default function MainLayout () {
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['1']} style={{ marginLeft: '300px' }}>
           <Menu.Item key="/HomePage"><Link to='/'>GamerBox</Link></Menu.Item>
           <Menu.Item key="/PersonalPage"><Link to='/PersonalPage/76561198302224528'>Personal</Link></Menu.Item>
-          <Menu.Item key="/RankPage"><Link to='/RankPage'>Rank</Link></Menu.Item>
+          <Menu.Item key="/RankPage"><Link to='/RankPage'>Popular</Link></Menu.Item>
           <Menu.Item key="/NewsPage"><Link to='/NewsPage'>News</Link></Menu.Item>
-          <Menu.Item key="/TestPage1"><Link to='/TestPage1'>Test</Link></Menu.Item>
           <Menu.Item key="/GameDetailPage1"><Link to='/GameDetailPage/730'>GameDetail</Link></Menu.Item>
         </Menu>
       </Header>

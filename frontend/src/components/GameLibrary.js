@@ -140,8 +140,8 @@ export default function GameLibrary() {
                 <Space direction="vertical" style={{ width: '100%' }} size={16}>
                   <Card bordered={false} hoverable={false} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                     <Row justify="space-between">
-                      <Text strong="true" >最近动态</Text>
-                      <Text>过去2周共{Math.round(playtime_2w*10)/10}小时</Text>
+                      <Text strong="true" >Recent Activity</Text>
+                      <Text>{Math.round(playtime_2w*10)/10} hours past 2 weeks</Text>
                     </Row>
                   </Card>
   
@@ -157,17 +157,17 @@ export default function GameLibrary() {
                             <Text strong="true"><a href={"/GameDetailPage/"+os.appid} target = "_blank" rel='noreferrer' style={{color: "black"}}>{os.name}</a></Text>
                           </Row>
                           <Row justify="end">
-                            <Text type="secondary">总游玩时长{Math.round(os.playtime*10)/10}小时</Text>
+                            <Text type="secondary">{Math.round(os.playtime*10)/10} hrs on record</Text>
                           </Row>
                           <Row justify="end">
-                            <Text type="secondary">过去两周游玩{Math.round(os.playtimeRecently*10)/10}小时</Text>
+                            <Text type="secondary">{Math.round(os.playtimeRecently*10)/10} hrs past two weeks</Text>
                           </Row>
                         </Col>
                       </Row>
                       {lockAchievement ? <NoA/> : <Card bordered={false} size="small" style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
                         <Row gutter={5}>
                           <Col span={5}>
-                            <Text type="secondary">成就进度 {NumberOfAchievemnts[index]}/{gameAchievements[index].length == null ? 0 : gameAchievements[index].length}</Text>
+                            <Text type="secondary">Achievement Progress {NumberOfAchievemnts[index]}/{gameAchievements[index].length == null ? 0 : gameAchievements[index].length}</Text>
                           </Col>
                           <Col span={5}>
                             <Progress percent={((NumberOfAchievemnts[index]) / (gameAchievements[index].length == null ? 0 : gameAchievements[index].length)) * 100} showInfo={false} status="active"

@@ -7,8 +7,6 @@ const { Title } = Typography;
 
 const appIdList = [730, 570, 1599340, 578080, 1172470, 1245620, 271590, 1203220, 252490, 440, 431960, 1418630, 1623660, 1085660, 1794680];
 const appName = ["Counter-Strike: Global Offensive", "Dota 2", "Lost Ark", "PUBG: BATTLEFROUDS", "Apex Legends", "ELDEN RING", "Grand Theft Auto V", "NARAKA:BLADPOINT", "Rust", "Team Fortress 2", "Wallpaper Engine", "Dread Hunger", "MIR 4", "Destiny 2", "Vampire Survivors"]
-// const appIdList = [730]
-// const appName = ["Counter-Strike: Global Offensive"]
 const feedString = "PCGamesN"
 
 //每个游戏读取多少条
@@ -148,19 +146,19 @@ export default function NewsPage () {
         <Space direction="vertical" size="large"  style={{ minWidth: '100%', padding: '0 30px' }}>
           {currentPageData.map((news, index) => (
              <Card size="small" hoverable="true"  style={{ height: '220px', minWidth: '100%', background: 'rgba(255, 255, 255, .3)'}} onClick={(e) => {
-              e = index;
-              setTemp(currentPageData[e]);
-              // temp = listData[e];
-              console.log(e);
-              console.log(temp);
-              setIsModalVisible(true);
-            }}>
+                  e = index;
+                  setTemp(currentPageData[e]);
+                  // temp = listData[e];
+                  console.log(e);
+                  console.log(temp);
+                  setIsModalVisible(true);
+                }}>
               <Row  align="top">
                 <Col span={14}>
                   <div style={{display: 'flex', alignItems: 'center', padding: '5px', borderRadius: '5px', background: 'rgba(255, 255, 255, .1)'}}>
                     <img src={news.logo} style={{width: '15%'}}></img>
                     <div  style={{width: '2%'}}></div>
-                    <div style={{fontSize: '20px'}}>{news.appName}</div>
+                    <div style={{fontSize: '20px'}}><a className='my-link' href={'/GameDetailPage/' + news.id}>{news.appName}</a></div>
                   </div>
                   {/* news title */}
                   <div style={{fontSize: '25px', fontWeight: '500', marginTop: '5px',

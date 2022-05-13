@@ -79,7 +79,7 @@ export default function Friend () {
   const ShowFriendList = () => (
     <Card size={'small'} bordered={false} hoverable={false} style={{ background: 'rgba(255, 255, 255, .1)', backdropFilter: 'blur(10px)' }}>
       <Divider orientation="left" plain>
-        好友 {UserArray.length}
+        Friends {UserArray.length}
       </Divider>
 
       {friendsL.length===0 ? <NoA/> : 
