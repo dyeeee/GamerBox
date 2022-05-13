@@ -15,7 +15,7 @@
   margin-bottom: 20px;
 }
 
-.news-model div { 
+.news-model div {
   font-size: 20px;
 }
 
@@ -43,7 +43,7 @@
   color: #262626 !important;
 }
 
-.my-link:hover{
+.my-link:hover {
   color: #8a1dcf !important;
 }
 
@@ -53,4 +53,8 @@
 
 .ant-card-meta-description {
   font-size: large !important;
+}
+
+.game-detail-color {
+  color: #FFFFFF !important
 }

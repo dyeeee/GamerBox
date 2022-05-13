@@ -44,11 +44,12 @@ async function getAchievements (uid) {
       console.log(achievements)
     })
     .catch(
-      console.log("error")
+      console.log(achievements),
+      console.log("error acheiv")
     )
 };
 
-const ellipsis = true
+
 
 export default function GameDetailPage1 () {
   const params = useParams();
@@ -64,6 +65,7 @@ export default function GameDetailPage1 () {
 
   const [isLoading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(true);
+  var achievementCheck = true
 
   useEffect(() => {
     async function fetchData () {
@@ -80,7 +82,7 @@ export default function GameDetailPage1 () {
   }, [refresh]);
 
   return (
-    <div style={{ background: `url('../../bg1.jpg')` }}>
+    <div className="game-detail-color" style={{ background: `url('../../bg1.jpg')` }}>
       <PageHeader
         className="site-page-header"
         title="Game Detail Page"
@@ -181,12 +183,12 @@ export default function GameDetailPage1 () {
         </Col>
 
 
-
         {testdata.length !== 0 ? <Col span={22} >
           <Card className="blur-card" size={'small'} bordered={false} hoverable={false} >
             <DualAxes {...config} />
           </Card>
         </Col> : <></>}
+
 
 
         <Col span={22} >
@@ -197,66 +199,35 @@ export default function GameDetailPage1 () {
                 Achievements
               </Divider>
 
-              {/* <Row gutter={[6, 6]} justify="center">
-                <Col span={6}>
-                  <Card size={'small'} className="blur-card" bordered={false} hoverable={true}>
-                    <Space style={{ width: '100%' }} size={15}>
-                      <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
-                      <>成就名</>
-                    </Space>
-                    <Row>
-                      <Progress size="small" percent={(10 / 20) * 100} status="active"
-                        strokeColor={'#3220B9'} />
-                    </Row>
-
-                  </Card>
-                </Col>
-              </Row> */}
-
               <Row gutter={[6, 6]} justify="center">
                 {
-                  achievements.map((obj, index) => (
-                    <Col span={6}>
-                      <Tooltip placement="top" title={obj.description}>
+                  achievements.length === 0 ?
+                    <>API Error</> :
+                    achievements.map((obj, index) => (
+                      <Col span={6}>
+                        <Tooltip placement="top" title={obj.description}>
+                          <Card className={'ant-card-small-achive'} size={'small'} bordered={false} hoverable={true}>
+                            <Space style={{ width: '100%' }} size={10}>
+                              <Avatar src={obj.icon} shape="square" />
+                              <Text level={6}
+                                style={{ maxWidth: 120 }}
+                                ellipsis={{ rows: 1, expandable: false }}>
+                                {obj.displayName}
+                              </Text>
+                            </Space>
+                          </Card>
+                        </Tooltip>
+                      </Col>
 
-
-                        <Card className={'ant-card-small-achive'} size={'small'} bordered={false} hoverable={true}>
-                          <Space style={{ width: '100%' }} size={10}>
-                            <Avatar src={obj.icon} shape="square" />
-
-
-                            <Text level={6}
-                              style={{ maxWidth: 120 }}
-                              ellipsis={{ rows: 1, expandable: false }}>
-                              {obj.displayName}
-                            </Text>
-
-
-                          </Space>
-                        </Card>
-                      </Tooltip>
-                    </Col>
-
-                  ))
+                    ))
                 }
-
-
-                {/* <Col span={6}>
-                  <Card size={'small'} className="blur-card" bordered={false} hoverable={true} style={{ height: 100 }}>
-                    <Space style={{ width: '100%' }} size={15}>
-                      <Avatar src={"https://joeschmoe.io/api/v1/random"} shape="square" />
-                      <Paragraph ellipsis={ellipsis ? { rows: 1, expandable: true, symbol: 'more' } : false}>
-                        {achievements[0].displayName}
-                      </Paragraph>
-                      <h6 style={{ overflow: 'hidden', textOverFlow: 'ellipsis', whiteSpace: 'nowrap' }}>{achievements[0].displayName}</h6>
-                    </Space>
-                  </Card>
-                </Col> */}
               </Row>
 
             </Card>
           }
         </Col>
+
+
 
 
 
