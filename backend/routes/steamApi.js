@@ -7,32 +7,32 @@ axios.defaults.timeout = 30000;
 axios.defaults.httpsAgent = new https.Agent({ keepAlive: true });
 axios.interceptors.response.use(undefined, function axiosRetryInterceptor (err) {
   var config = err.config;
-  // 如果配置不存在或未设置重试选项，则拒绝
+  // If the configuration does not exist or the retry option is not set, reject it
   if (!config || !config.retry) return Promise.reject(err);
 
-  // 设置变量以跟踪重试次数
+  // Sets the variable to track the number of retries
   config.__retryCount = config.__retryCount || 0;
 
-  // 判断是否超过总重试次数
+  // Check whether the total number of retries is exceeded
   if (config.__retryCount >= config.retry) {
-    // 返回错误并退出自动重试
+    // Returns an error and exits automatic retry
     return Promise.reject(err);
   }
 
-  // 增加重试次数
+  // add the retry times
   config.__retryCount += 1;
 
-  //打印当前重试次数
-  console.log(config.url + ' 自动重试第' + config.__retryCount + '次');
+  //print the retry times
+  console.log(config.url + ' Automatic retry' + config.__retryCount + 'times');
 
-  // 创建新的Promise
+  // create new Promise
   var backoff = new Promise(function (resolve) {
     setTimeout(function () {
       resolve();
     }, config.retryDelay || 1);
   });
 
-  // 返回重试请求
+  // Return retry request
   return backoff.then(function () {
     return axios(config);
   });
@@ -40,7 +40,6 @@ axios.interceptors.response.use(undefined, function axiosRetryInterceptor (err) 
 
 // Gets steam news
 router.post('/getNews', async (req, res) => {
-  //这个api返回结果就是一个json，所以可以直接用res.send       且可以直接访问json中的各节点
   const appid = req.body.appid;
   const count = req.body.count;
   const feeds = req.body.feeds;
@@ -60,7 +59,6 @@ router.post('/getNews', async (req, res) => {
 
 // Gets number of online players
 router.post('/getOnlinePlayer', async (req, res) => {
-  //这个api返回结果就是一个json，所以可以直接用res.send       且可以直接访问json中的各节点
   const appid = req.body.appid;
   console.log('https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?access_token=51cff501b898a0d16c3b287284c04e48&appid=' + appid)
   axios.get('https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?access_token=51cff501b898a0d16c3b287284c04e48&appid=' + appid, {
@@ -78,7 +76,6 @@ router.post('/getOnlinePlayer', async (req, res) => {
 
 // Gets userinfo
 router.post('/getUserInfo', async (req, res) => {
-  //这个api返回结果就是一个json，所以可以直接用res.send       且可以直接访问json中的各节点
   let api = 'https://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key=C29734B137600548FE00C77906A76EE5&steamids=';
   const steamids = req.body.steamids;
   console.log(api + steamids)
@@ -97,7 +94,6 @@ router.post('/getUserInfo', async (req, res) => {
 
 // Gets user's friend list
 router.post('/getFriendList', async (req, res) => {
-  //这个api返回结果就是一个json，所以可以直接用res.send       且可以直接访问json中的各节点
   let api = 'https://api.steampowered.com/ISteamUser/GetFriendList/v1/?key=C29734B137600548FE00C77906A76EE5&steamid=';
   const steamids = req.body.steamids;
   console.log(api + steamids)
@@ -114,8 +110,6 @@ router.post('/getFriendList', async (req, res) => {
       console.log(error);
     });
 });
-
-//成就部分:
 
 //Get Player Achievements of a game
 router.post('/getAchievements', async (req, res) => {
@@ -174,7 +168,7 @@ router.post('/getAchievementsDetail', async (req, res) => {
     });
 })
 
-//获取玩家库下游戏(里面有icon，配合图床http://media.steampowered.com/steamcommunity/public/images/apps/{appid}/{hash}.jpg使用。也可以用轩宝的大图图床，只需要appid即可)
+//Get the game from the player library
 router.post('/getGamesLibrary', async (req, res) => {
   const steamids = req.body.steamids;
   let api = 'https://api.steampowered.com/IPlayerService/GetOwnedGames/v1/?key=C29734B137600548FE00C77906A76EE5&steamid=' + steamids + '&include_appinfo=true&include_free_sub=false&include_free_sub=true';

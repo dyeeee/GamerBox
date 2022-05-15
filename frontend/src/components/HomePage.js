@@ -67,7 +67,7 @@ export default function HomePage() {
         <div style={{fontSize: '70px', fontWeight: '500', marginTop: '5%', color: '#ffffff'}}>
         Welcome to Game Box!</div>
           
-        {/* 可能的在线人数 */}
+        {/* The number of people likely to be online */}
         <div style={{fontSize: '30px', fontWeight: '500', marginTop: '1%', color: '#ffffff'}}><span style={{color: '#f6622a'}}>{currentPlayersNum}</span> users are playing {gameName}</div>
       </div>
 

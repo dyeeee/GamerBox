@@ -10,7 +10,7 @@ const { Text } = Typography;
 
 var count = 0;
 var currentPageData = [];
-//当前页的十个游戏的游戏成就
+//Game achievements of the ten games on the current page
 //name      defaultvalue  displayName  hidden      description  icon  icongray
 var gameAchievements = [];
 var CurrentNumberOfPage = 5;
@@ -91,7 +91,7 @@ export default function GameLibrary() {
         })
     };
   
-  //slice(0,5) 切割array的函数，包括开头，不包括结尾 0,5 就是0-4
+  //slice(0,5)
   async function paging(gameArray, currentPage){
       const start = currentPage-CurrentNumberOfPage;
       return gameArray.slice(start,currentPage);
@@ -122,7 +122,7 @@ export default function GameLibrary() {
     // console.log(isLoading);
   
     let playtime_2w = 0;
-    //计算最近两周用户游玩总时间
+    //Calculate the total time the user played in the last two weeks
     gameArray.forEach(game =>{
       playtime_2w += game.playtimeRecently;
     })
