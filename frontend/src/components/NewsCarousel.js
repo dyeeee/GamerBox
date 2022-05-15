@@ -99,6 +99,7 @@ function ShowNewsCarousel(){
             <Card bordered = "false"
               hoverable = "true"
               cover={<img alt="index" src={news.img} style={imgStyle}/>}
+              onClick={()=>{toWeb("/NewsPage")}}
             >
               <Meta title={news.title} description={news.appName} />
             </Card>
@@ -114,6 +115,10 @@ function ShowNewsCarousel(){
       }
   </Carousel>
   )
+}
+
+function toWeb(url){
+  window.location.href = url;
 }
 
 function ShowLoading(){
