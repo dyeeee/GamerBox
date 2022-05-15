@@ -99,7 +99,20 @@ yarn start
 
 ## Screenshots
 
+### Homepage
+<img src="https://github.com/dyeeee/GamerBox/blob/master/screenshots/1.png" width="720"/>
 
+### Popular Games
+<img src="https://github.com/dyeeee/GamerBox/blob/master/screenshots/2.png" width="720"/>
+
+### Game News
+<img src="https://github.com/dyeeee/GamerBox/blob/master/screenshots/3.png" width="720"/>
+
+### Personal Page
+<img src="https://github.com/dyeeee/GamerBox/blob/master/screenshots/4.png" width="720"/>
+
+### Game Details
+<img src="https://github.com/dyeeee/GamerBox/blob/master/screenshots/5.png" width="720"/>
 
 
 
@@ -196,3 +209,17 @@ yarn start
 
 ## 项目截图
 
+### Homepage
+<img src="https://github.com/dyeeee/GamerBox/blob/master/screenshots/1.png" width="720"/>
+
+### Popular Games
+<img src="https://github.com/dyeeee/GamerBox/blob/master/screenshots/2.png" width="720"/>
+
+### Game News
+<img src="https://github.com/dyeeee/GamerBox/blob/master/screenshots/3.png" width="720"/>
+
+### Personal Page
+<img src="https://github.com/dyeeee/GamerBox/blob/master/screenshots/4.png" width="720"/>
+
+### Game Details
+<img src="https://github.com/dyeeee/GamerBox/blob/master/screenshots/5.png" width="720"/>
