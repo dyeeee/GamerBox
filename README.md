@@ -33,19 +33,21 @@
 
 ### Start Backend
 
+Make sure **MongoDB** is started!!
+
 Run following code to add dependencies and initilize under ./backend：
 
 ```
 yarn
 yarn add axios
 yarn add nodemon
+yarn add mongoose
 yarn run init-db
 ```
 
 * axios: Request API
-
 * nodemon: Hot deployment
-
+* mongoose: MongoDB for React
 * init-db: Excute MongoDB initial code
 
 
@@ -127,19 +129,21 @@ yarn start
 ## 配置及启动
 ### 后端
 
+请确保**MongoDB**数据库已经启动!!
+
 在 ./backend路径下执行以下代码：
 
 ```
 yarn
 yarn add axios
 yarn add nodemon
+yarn add mongoose
 yarn run init-db
 ```
 
 * axios: API请求
-
 * nodemon: 后端热更新
-
+* mongoose: MongoDB for React
 * init-db: 执行数据库初始化代码
 
 
