@@ -1,6 +1,6 @@
 # CS732 Project - GamerBox
 
-[English](#) ｜ [Chinese](#中文文档)
+[English](#) ｜ [Chinese](#GamerBox中文文档)
 
 ## Features
 
@@ -16,21 +16,16 @@
 
 ### Start Backend
 
-Run following code to add dependencies and initilize：
+Run following code to add dependencies and initilize under ./backend：
 
 ```
+yarn
 yarn add axios
-```
-
-```
 yarn add nodemon
+run init-db ??
 ```
 
-```
-init db
-```
-
-Run following code to get start
+Run following code to get start under ./backend：
 
 ```
 yarn start
@@ -39,7 +34,7 @@ yarn start
 
 ### Start Frontend
 
-Run following code to add dependencies and initilize：
+Run following code to add dependencies and initilize under ./forntend:
 
 ```
 yarn
@@ -52,7 +47,7 @@ yarn add @craco/craco
 yarn add craco-less
 ```
 
-Run following code to get start
+Run following code to get start under ./forntend:
 
 ```
 yarn start
@@ -64,15 +59,19 @@ yarn start
 
 
 
-## 中文文档
+# GamerBox中文文档
 
 ## 功能
 
 ## 技术栈
 
+* React Framework
+* Express
+* MongoDB
+* AntDesign UI Framework
 
-
-## 后端
+## 配置及启动
+### 后端
 
 安装了axios用于请求api
 ```
@@ -94,9 +93,9 @@ execMap: 设置运行服务的后缀名与对应的命令
 
 
 
-## 前端
+### 前端
 
-### 基本运行要下的包：
+#### 基本运行要下的包：
 
 ```
 yarn
@@ -106,7 +105,7 @@ yarn
 yarn add antd
 ```
 
-### 修改主题需要下载的包：
+#### 修改主题需要下载的包：
 
 ```
 yarn add @craco/craco
@@ -120,7 +119,7 @@ yarn add craco-less
 
 然后再craco.config.js里面改
 
-### 数据可视化
+#### 数据可视化
 
 antd 所属的      ant design charts 或者  antv 选一个？
 
