@@ -100,7 +100,7 @@ function ShowNewsCarousel(){
               hoverable = "true"
               cover={<img alt="index" src={news.img} style={imgStyle}/>}
             >
-              <Meta title={news.title} description={news.appName} style={{fontSize: '40px'}}/>
+              <Meta title={news.title} description={news.appName} />
             </Card>
           </div>
           

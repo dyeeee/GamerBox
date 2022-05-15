@@ -1,11 +1,10 @@
 import React from 'react'
-import { useState, useEffect, useContext } from 'react'
+import { useState, useEffect} from 'react'
 import usePost from '../usePost';
-import { Typography, Divider, Space, Card, Row, Col, Image, Spin, Modal, Carousel, List, message, Avatar} from 'antd';
+import { Typography, Card, Row, Col} from 'antd';
 import RankList from './RankList';
 import NewsCarousel from './NewsCarousel'
 import axios from 'axios';
-import { Outlet, Link, useLocation } from "react-router-dom"
 import "../css/GlobalCSS.css"
 
 const { Title } = Typography;
@@ -15,6 +14,7 @@ const appIdList = [730, 570, 1599340, 578080, 1172470, 1245620, 271590, 1203220,
 const appName = ["Counter-Strike: Global Offensive", "Dota 2", "Lost Ark", "PUBG: BATTLEFROUDS", "Apex Legends", "ELDEN RING", "Grand Theft Auto V", "NARAKA:BLADPOINT", "Rust", "Team Fortress 2", "Wallpaper Engine", "Dread Hunger", "MIR 4", "Destiny 2", "Vampire Survivors"]
 var currentPlayersNum = null;
 var gameName = null;
+var template = null;
 
 function showhtml(htmlString){
   var html = {__html:htmlString};
@@ -26,6 +26,7 @@ async function getcurrentUsers (index){
   .then(response => {
     currentPlayersNum = response.data;
     gameName = appName[index];
+    template = " users are playing ";
     console.log(response.data);
   })
   .catch(error => {
@@ -65,10 +66,10 @@ export default function HomePage() {
       <div style={{textAlign: 'center', backgroundImage:"url('./bg1.jpg')", marginTop:"-99px", marginLeft:"-24px", marginRight:"-24px", paddingTop:"3%", paddingBottom:"5%"}}>
         {/* Title */}
         <div style={{fontSize: '70px', fontWeight: '500', marginTop: '5%', color: '#ffffff'}}>
-        Welcome to Game Box!</div>
+        Welcome to GamerBox!</div>
           
         {/* The number of people likely to be online */}
-        <div style={{fontSize: '30px', fontWeight: '500', marginTop: '1%', color: '#ffffff'}}><span style={{color: '#f6622a'}}>{currentPlayersNum}</span> users are playing {gameName}</div>
+        <div style={{fontSize: '30px', fontWeight: '500', marginTop: '1%', color: '#ffffff'}}><span style={{color: '#f6622a'}}>{currentPlayersNum}</span>{template}{gameName}</div>
       </div>
 
       <Row style={{marginTop: '1%'}} gutter={32} align="top">

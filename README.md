@@ -37,7 +37,7 @@ This project aims to design, implement, test and deploy a cross-platform web app
 
 Make sure **MongoDB** is started!!
 
-Run following code to add dependencies and initilize under ./backend：
+Run following code to add dependencies and initilize under **./backend**：
 
 ```
 yarn
@@ -53,7 +53,7 @@ yarn run init-db
 * init-db: Excute MongoDB initial code
 
 
-Run following code  under ./backend to start backend:
+Run following code  under **./backend** to start backend:
 ```
 yarn start
 ```
@@ -61,14 +61,14 @@ yarn start
 
 ### Start Frontend
 
-Run following code to add dependencies and initilize under ./forntend:
+Run following code to add dependencies and initilize under **./forntend**:
 
 ```
 yarn
 yarn add axios
 
 yarn add antd
-npm install @ant-design/charts --save
+yarn add @ant-design/charts --save
 
 yarn add @craco/craco
 yarn add craco-less
@@ -81,7 +81,7 @@ yarn add craco-less
 * @craco/craco & craco-less: Modify theme
 
 
-Run following code  under ./forntend to start frontend:
+Run following code  under **./forntend** to start frontend:
 
 ```
 yarn start
@@ -89,8 +89,9 @@ yarn start
 
 ### Note
 
-1. Since the data request is based on steamAPI, it may take some time to load if the network quality is not good.
-2. The personal detail page needs to enter the personal steamID. Project developer's page is displayed by default. The following IDs are available for test:  
+1. When using the yarn add command to download dependencies (especially Ant Design dependencies), you may be prompted for network connection problem, even though your network is normal. Please try several times if you meet this problem.
+2. Since the data request is based on steamAPI, it may take some time to load if the network quality is not good.
+3. The personal detail page needs to enter the personal steamID. Project developer's page is displayed by default. The following IDs are available for test:  
    * 76561198402813649
    * 76561198302224528
    * 76561198399481384
@@ -137,7 +138,7 @@ yarn start
 
 请确保**MongoDB**数据库已经启动!!
 
-在 ./backend路径下执行以下代码：
+在 **./backend**路径下执行以下代码：
 
 ```
 yarn
@@ -153,7 +154,7 @@ yarn run init-db
 * init-db: 执行数据库初始化代码
 
 
-启动后端，在 ./backend路径下执行以下代码
+启动后端，在 **./backend**路径下执行以下代码
 ```
 yarn start
 ```
@@ -161,7 +162,7 @@ yarn start
 
 ### 前端
 
-在 ./frontend路径下执行以下代码：
+在 **./frontend**路径下执行以下代码：
 
 ```
 yarn
@@ -180,14 +181,15 @@ yarn add craco-less
 
 * @craco/craco & craco-less: 主题修改
 
-启动前端，在 ./frontend路径下执行以下代码：
+启动前端，在 **./frontend**路径下执行以下代码：
 ```
 yarn start
 ```
 
 ### 注意事项
-1. 由于数据的请求基于steamAPI，如果网络质量不佳，可能需要加载一定的时间。
-2. 个人详情页需要输入个人steamID，默认展示的是项目开发者的个人页面。以下ID可供查询：
+1. 当您使用 yarn add 命令下载依赖项（尤其是Ant Design相关的依赖项）时，即使您的网络正常，也可能会提示网络连接问题。如果您遇到此问题，请多重试几次。
+2. 由于数据的请求基于steamAPI，如果网络质量不佳，可能需要加载一定的时间。
+3. 个人详情页需要输入个人steamID，默认展示的是项目开发者的个人页面。以下ID可供查询：
    * 76561198402813649
    * 76561198302224528
    * 76561198399481384
