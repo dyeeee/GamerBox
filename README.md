@@ -2,6 +2,8 @@
 
 [English](#) ｜ [Chinese](#GamerBox中文文档)
 
+## Intro
+
 ## Features
 
 * Latest Game News
@@ -37,11 +39,17 @@ Run following code to add dependencies and initilize under ./backend：
 yarn
 yarn add axios
 yarn add nodemon
-run init-db ??
+yarn run init-db
 ```
 
-Run following code to get start under ./backend：
+* axios: Request API
 
+* nodemon: Hot deployment
+
+* init-db: Excute MongoDB initial code
+
+
+Run following code  under ./backend to start backend:
 ```
 yarn start
 ```
@@ -62,11 +70,24 @@ yarn add @craco/craco
 yarn add craco-less
 ```
 
-Run following code to get start under ./forntend:
+* axios: Request API
+
+* antd & @ant-design/charts: UI Framework
+
+* @craco/craco & craco-less: Modify theme
+
+
+Run following code  under ./forntend to start frontend:
 
 ```
 yarn start
 ```
+
+### Note
+
+1. Since the data request is based on steamAPI, it may take some time to load if the network quality is not good.
+2. The personal detail page needs to enter the personal steamID. Project developer's page is displayed by default. The following IDs are available for test:
+
 
 ## Screenshots
 
@@ -76,7 +97,25 @@ yarn start
 
 # GamerBox中文文档
 
+## 简介
+
+
 ## 功能
+* 最新游戏新闻
+* 个人游戏数据展示
+  * Steam等级
+  * 游戏数据
+  * 成就
+  * 好友
+* 热门游戏可视化
+  * 当前玩家人数
+  * 近期玩家数量变化
+* 游戏详情
+  * 游戏图片
+  * 出版商
+  * 游戏类型
+  * 支持情况
+  * 游戏成就
 
 ## 技术栈
 
@@ -88,61 +127,58 @@ yarn start
 ## 配置及启动
 ### 后端
 
-安装了axios用于请求api
+在 ./backend路径下执行以下代码：
+
 ```
+yarn
 yarn add axios
-```
-
-热更新： nodemon包
-```
 yarn add nodemon
+yarn run init-db
 ```
 
-需要创建配置文件 nodemon.json  
-restartable: 设置重启模式  
-ignore: 设置忽略文件  
-verbose: 设置日志输出模式，true 详细模式  
-execMap: 设置运行服务的后缀名与对应的命令  
+* axios: API请求
 
-然后将package.json中的"scripts"中的start中的node替换为 nodemon，表示以后yarn start都是用nodemon来启动，而不是node
+* nodemon: 后端热更新
 
+* init-db: 执行数据库初始化代码
+
+
+启动后端，在 ./backend路径下执行以下代码
+```
+yarn start
+```
 
 
 ### 前端
 
-#### 基本运行要下的包：
+在 ./frontend路径下执行以下代码：
 
 ```
 yarn
-```
+yarn add axios
 
-```
 yarn add antd
-```
+npm install @ant-design/charts --save
 
-#### 修改主题需要下载的包：
-
-```
 yarn add @craco/craco
-```
-
-```
 yarn add craco-less
 ```
 
-具体配色如何改？ 参考：https://ant.design/docs/react/customize-theme-cn  
+* axios: Request API
 
-然后再craco.config.js里面改
+* antd & @ant-design/charts: UI 框架
 
-#### 数据可视化
+* @craco/craco & craco-less: 主题修改
 
-antd 所属的      ant design charts 或者  antv 选一个？
-
-前端安装
+启动前端，在 ./frontend路径下执行以下代码：
 ```
-yarn add axios
-
-npm install @ant-design/charts --save
+yarn start
 ```
 
+### 注意事项
+1. 由于数据的请求基于steamAPI，如果网络质量不佳，可能需要加载一定的时间。
+2. 个人详情页需要输入个人steamID，默认展示的是项目开发者的个人页面。以下ID可供查询：
+
+
+## 项目截图
 
