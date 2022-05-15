@@ -23,7 +23,7 @@ axios.interceptors.response.use(undefined, function axiosRetryInterceptor (err) 
   config.__retryCount += 1;
 
   //print the retry times
-  console.log(config.url + ' Automatic retry' + config.__retryCount + 'times');
+  console.log(config.url + ' Automatic retry ' + config.__retryCount + ' times');
 
   // create new Promise
   var backoff = new Promise(function (resolve) {

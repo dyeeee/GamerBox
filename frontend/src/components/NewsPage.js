@@ -71,6 +71,7 @@ async function getNews (i){
       console.log(response.data);
       const manyNews = response.data.map(news => ({id: news.gid, title: news.title, url:news.url, author:news.author, content:news.contents, date:news.date}));
       manyNews.forEach(oneNews => {
+        oneNews.appId = appIdList[i]
         oneNews.appName = appName[i]
         oneNews.img = getImg(oneNews.content)
         oneNews.summary = getSummary(oneNews.content)
@@ -101,11 +102,13 @@ export default function NewsPage () {
       setLoading(true);
       try{
         if(refresh){
+          listData = []
           for(let i = 0; i < appIdList.length; i++){
             await getNews(i);
           }
           setRefresh(false)
         }
+        console.log(refresh)
         currentPageData = await paging(listData, currentPage, pageCount)
         setLoading(false);
       } catch{
@@ -142,7 +145,6 @@ export default function NewsPage () {
              <Card size="small" hoverable="true"  style={{ height: '220px', minWidth: '100%', background: 'rgba(255, 255, 255, .3)'}} onClick={(e) => {
                   e = index;
                   setTemp(currentPageData[e]);
-                  // temp = listData[e];
                   console.log(e);
                   console.log(temp);
                   setIsModalVisible(true);
@@ -152,7 +154,7 @@ export default function NewsPage () {
                   <div style={{display: 'flex', alignItems: 'center', padding: '5px', borderRadius: '5px', background: 'rgba(255, 255, 255, .1)'}}>
                     <img src={news.logo} style={{width: '15%'}}></img>
                     <div  style={{width: '2%'}}></div>
-                    <div style={{fontSize: '20px'}}><a className='my-link' href={'/GameDetailPage/' + news.id}>{news.appName}</a></div>
+                    <div style={{fontSize: '20px'}}><a className='my-link' href={'/GameDetailPage/' + news.appId}>{news.appName}</a></div>
                   </div>
                   {/* news title */}
                   <div style={{fontSize: '25px', fontWeight: '500', marginTop: '5px',

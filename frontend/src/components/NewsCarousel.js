@@ -63,6 +63,7 @@ export default function NewsCarousel () {
     async function fetchData(){
       setLoading(true);
       try{
+        listData = []
         for(let i = 0; i < randomChooseNumber; i++){
           await getNews(i);
         }
