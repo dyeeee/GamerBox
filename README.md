@@ -4,6 +4,21 @@
 
 ## Features
 
+* Latest Game News
+* Personal Game Data Display
+  * Steam level
+  * Game data
+  * Achievements
+  * Friends
+* Popular Games Visualization
+  * Current number of players
+  * Visualization of recent changes in the number of players
+* Game Details
+  * Screenshots
+  * Publishers
+  * Genre
+  * Supports
+  * Achievements
 
 ## Used Technics 
 
